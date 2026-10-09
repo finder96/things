@@ -19,12 +19,13 @@
 }
 html,body{background:var(--bg);color:var(--fg)}
 body{margin:0}*{box-sizing:border-box}
+[hidden]{display:none!important}
 body{font-family:var(--f-body);font-size:14px;line-height:1.45}
-.app{max-width:1400px;margin:0 auto;padding:16px;display:grid;gap:16px;
-  grid-template-columns:250px minmax(300px,1fr) 330px;grid-template-areas:"top top top" "ctl stage mon"}
+.app{max-width:1440px;margin:0 auto;padding:16px;display:grid;gap:16px;
+  grid-template-columns:270px minmax(300px,1fr) 340px;grid-template-areas:"top top top" "ctl stage mon"}
 .top{grid-area:top;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 24px;border-bottom:1px solid var(--line);padding-block:4px 14px}
 h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,3.4vw,38px);margin:0;letter-spacing:-.01em;text-wrap:balance}
-.top p{margin:4px 0 0;color:var(--muted);max-width:62ch}
+.top p{margin:4px 0 0;color:var(--muted);max-width:66ch}
 .clock{font-family:var(--f-mono);color:var(--muted);font-size:13px;display:flex;gap:14px;align-items:baseline}
 .clock b{color:var(--fg);font-size:22px;font-weight:500}
 .controls{grid-area:ctl;display:flex;flex-direction:column;gap:18px;min-width:0}
@@ -32,27 +33,42 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,3.4vw,38px)
 .monitor{grid-area:mon;display:flex;flex-direction:column;gap:14px;min-width:0}
 .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0 0 8px;font-weight:600}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.seg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 button{font:inherit;color:var(--fg);background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px 10px;cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
 button:hover{border-color:#36536a}
+button:disabled{opacity:.5;cursor:default}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--glass);outline-offset:2px}
 button.on{background:#17394a;border-color:var(--glass);color:#fff}
 button small{display:block;color:var(--muted);font-size:11.5px}
+.seg3 button{text-align:center;padding:8px 4px}
+.go{background:#3a1d24;border-color:#7a3442;text-align:center;font-weight:600;width:100%}
+.go:hover{border-color:var(--crit)}
 .acts{display:flex;flex-direction:column;gap:6px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
 input[type=range]{width:100%;accent-color:var(--glass)}
-select{font:inherit;background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:7px;width:100%}
+select{font:inherit;background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
 .layers{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}
 .layers label{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px}
-.sw{width:10px;height:10px;border-radius:2px;display:inline-block}
+.sw{width:10px;height:10px;border-radius:2px;display:inline-block;flex:none}
 .mono{font-family:var(--f-mono)}
+.subbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.subdesc{font-size:13px;color:#c3d3dc;margin:0}
+.subdesc b{color:var(--fg);font-weight:600}
+.subdesc .tr{display:block;margin-top:6px;color:var(--ok);font-size:12.5px}
+.note{font-size:11.5px;color:var(--muted);margin:0}
+.note .mono{color:var(--fg);user-select:all}
 svg#body{width:100%;max-width:520px;height:auto;max-height:calc(100vh - 140px);display:block;user-select:none}
 svg#body [data-organ]{cursor:pointer}
 svg#body .sel{filter:url(#selglow)}
 .hint{color:var(--muted);font-size:12.5px;margin-top:6px;text-align:center}
+.over{position:absolute;inset:30% 8% auto;background:rgba(10,18,25,.92);border:1px solid var(--crit);border-radius:12px;padding:18px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center}
+.over h2{font-family:var(--f-display);margin:0;color:var(--crit);font-size:24px}
+.over p{margin:0;color:#c3d3dc;max-width:40ch}
+.over button{text-align:center}
 .vitals{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.v{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0;position:relative}
+.v{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0;position:relative}
 .v .n{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px}
-.v .val{font-family:var(--f-mono);font-size:21px;font-variant-numeric:tabular-nums;line-height:1.2}
+.v .val{font-family:var(--f-mono);font-size:20px;font-variant-numeric:tabular-nums;line-height:1.2}
 .v .val span{font-size:11px;color:var(--muted);margin-left:3px}
 .v i{position:absolute;top:10px;right:9px;width:7px;height:7px;border-radius:50%;background:var(--ok)}
 .v.warn i{background:var(--warn)} .v.crit i{background:var(--crit);box-shadow:0 0 8px var(--crit)}
@@ -65,13 +81,25 @@ canvas#ecg{width:100%;height:84px;display:block;
 .info .sys{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--glass)}
 .info p{margin:6px 0 0;color:#c3d3dc}
 .info .live{margin-top:8px;font-family:var(--f-mono);font-size:12.5px;color:var(--fg);background:var(--panel2);border-radius:6px;padding:7px 8px}
+.organs{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.org{display:grid;grid-template-columns:1fr auto;gap:2px 6px;font-size:12.5px}
+.org .bar{grid-column:1/-1}
+.bar{height:5px;background:var(--panel2);border-radius:3px;overflow:hidden}
+.bar b{display:block;height:100%;width:0;background:var(--ok);border-radius:3px;transition:width .3s}
+.active{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.active li{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:4px 8px;align-items:center}
+.active .nm{font-weight:600;display:flex;gap:7px;align-items:center;min-width:0}
+.active .st{font-size:12px;color:var(--muted);grid-column:1/-1}
+.active .bar{grid-column:1/-1}
+.active button{padding:5px 9px;font-size:12px;text-align:center}
+.empty{color:var(--muted);font-size:12.5px;margin:0}
 .log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:12.5px}
 .log li{display:flex;gap:8px;color:#c3d3dc}
 .log li b{font-family:var(--f-mono);font-weight:400;color:var(--muted);flex:none}
-@media (max-width:1050px){.app{grid-template-columns:1fr 330px;grid-template-areas:"top top" "stage mon" "ctl ctl"}
-  .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}}
+@media (max-width:1100px){.app{grid-template-columns:1fr 340px;grid-template-areas:"top top" "stage mon" "ctl ctl"}
+  .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
 @media (max-width:720px){.app{grid-template-columns:1fr;grid-template-areas:"top" "stage" "ctl" "mon"}
-  svg#body{max-height:none}}
+  svg#body{max-height:none}.over{inset:20% 0 auto}}
 </style>
 </head>
 <body>
@@ -80,12 +108,24 @@ canvas#ecg{width:100%;height:84px;display:block;
   <header class="top">
     <div>
       <h1>Corpo Transparente</h1>
-      <p>Um corpo humano simulado com os sistemas ligados entre si. Mude a atividade, coma, beba ou prenda a respiração e veja os órgãos reagirem.</p>
+      <p>Um corpo humano simulado com os sistemas ligados entre si. Dê a ele uma das 26 substâncias, de cafeína a cianeto, e acompanhe o que cada órgão sofre, em tempo real.</p>
     </div>
     <div class="clock"><span>hora simulada</span><b id="clock">08:00</b></div>
   </header>
 
   <aside class="controls">
+    <section class="subbox">
+      <h3 class="lbl" style="margin:0">Substâncias</h3>
+      <select id="subSel" aria-label="Escolher substância"></select>
+      <div class="seg3" id="doses">
+        <button data-d="0" id="dose0">Pequena</button>
+        <button data-d="1" id="dose1" class="on">Moderada</button>
+        <button data-d="2" id="dose2">Extrema</button>
+      </div>
+      <p class="subdesc" id="subDesc"></p>
+      <button class="go" id="subGo">Ingerir</button>
+      <p class="note">Simulação educativa e simplificada. Intoxicação de verdade: Disque-Intoxicação <span class="mono">0800 722 6001</span> ou SAMU <span class="mono">192</span>.</p>
+    </section>
     <section>
       <h3 class="lbl">Atividade</h3>
       <div class="seg" id="acts">
@@ -105,14 +145,15 @@ canvas#ecg{width:100%;height:84px;display:block;
       </div>
     </section>
     <section>
-      <h3 class="lbl">Ambiente</h3>
+      <h3 class="lbl">Ambiente e tempo</h3>
       <div class="row"><label for="env">Temperatura externa</label><span class="mono" id="envv">24 °C</span></div>
       <input type="range" id="env" min="0" max="42" value="24">
-      <div class="row" style="margin-top:10px"><label for="speed">Velocidade do metabolismo</label></div>
+      <div class="row" style="margin-top:10px"><label for="speed">Velocidade do tempo</label></div>
       <select id="speed">
         <option value="1">1 s real = 1 min</option>
         <option value="5">1 s real = 5 min</option>
         <option value="15">1 s real = 15 min</option>
+        <option value="60">1 s real = 1 hora</option>
       </select>
     </section>
     <section>
@@ -126,18 +167,17 @@ canvas#ecg{width:100%;height:84px;display:block;
     <svg id="body" viewBox="40 10 320 885" role="img" aria-label="Corpo humano transparente com órgãos animados">
       <defs>
         <radialGradient id="glass" cx="50%" cy="35%" r="70%">
-          <stop offset="0" stop-color="#8fd8e8" stop-opacity=".13"/>
-          <stop offset="1" stop-color="#8fd8e8" stop-opacity=".03"/>
+          <stop id="gs1" offset="0" stop-color="#8fd8e8" stop-opacity=".13"/>
+          <stop id="gs2" offset="1" stop-color="#8fd8e8" stop-opacity=".03"/>
         </radialGradient>
         <filter id="blur6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
         <filter id="selglow" x="-50%" y="-50%" width="200%" height="200%">
           <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#ffffff" flood-opacity=".9"/>
         </filter>
-        <clipPath id="cpStom"><path id="stomShape" d="M232,318 C252,313 264,330 259,352 C254,374 232,384 214,374 C205,368 211,358 222,358 C236,358 240,345 233,334 Z"/></clipPath>
+        <clipPath id="cpStom"><path d="M232,318 C252,313 264,330 259,352 C254,374 232,384 214,374 C205,368 211,358 222,358 C236,358 240,345 233,334 Z"/></clipPath>
         <clipPath id="cpBlad"><ellipse cx="200" cy="498" rx="16" ry="12"/></clipPath>
       </defs>
-
-      <!-- pele -->
+      <g id="whole">
       <g data-organ="pele">
         <path id="skin" fill="url(#glass)" stroke="#8fd8e8" stroke-width="1.6" stroke-opacity=".75"/>
         <ellipse id="head" cx="200" cy="74" rx="44" ry="54" fill="url(#glass)" stroke="#8fd8e8" stroke-width="1.6" stroke-opacity=".75"/>
@@ -151,7 +191,7 @@ canvas#ecg{width:100%;height:84px;display:block;
         <ellipse id="liverHalo" cx="188" cy="332" rx="44" ry="24" fill="#ff9a6a" opacity="0" filter="url(#blur6)"/>
         <path data-organ="figado" d="M148,318 C175,304 222,307 229,322 C227,339 205,351 180,353 C159,353 146,341 148,318Z" fill="#9c4a3a" fill-opacity=".8" stroke="#d07a62" stroke-width="1"/>
         <g data-organ="estomago">
-          <use href="#stomShape" fill="#e7a07a" fill-opacity=".35" stroke="#f0b090" stroke-width="1.4"/>
+          <path d="M232,318 C252,313 264,330 259,352 C254,374 232,384 214,374 C205,368 211,358 222,358 C236,358 240,345 233,334 Z" fill="#e7a07a" fill-opacity=".35" stroke="#f0b090" stroke-width="1.4"/>
           <rect id="stomFill" x="200" y="384" width="70" height="0" fill="#f2c27a" fill-opacity=".85" clip-path="url(#cpStom)"/>
         </g>
         <path data-organ="intgro" id="lgInt" d="M168,472 L166,414 C166,405 172,400 181,400 L221,400 C230,400 235,405 235,414 L235,470 C235,478 223,483 210,481" fill="none" stroke="#c98b6b" stroke-width="9" stroke-linecap="round" stroke-opacity=".75"/>
@@ -172,7 +212,7 @@ canvas#ecg{width:100%;height:84px;display:block;
       </g>
 
       <g id="L-resp">
-        <path data-organ="traqueia" id="trachea" d="M200,138 L200,212 L182,226 M200,212 L218,226" fill="none" stroke="#b9d4de" stroke-width="5" stroke-linecap="round" stroke-opacity=".55"/>
+        <path data-organ="traqueia" d="M200,138 L200,212 L182,226 M200,212 L218,226" fill="none" stroke="#b9d4de" stroke-width="5" stroke-linecap="round" stroke-opacity=".55"/>
         <path id="airflow" d="M200,138 L200,212 L182,226 M200,212 L218,226" fill="none" stroke="#e8fbff" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>
         <g id="lungs" data-organ="pulmoes">
           <path class="lung" d="M182,206 C162,204 145,230 142,265 C140,296 145,318 160,322 C173,325 183,315 185,300 L185,218 Z" fill="#f29aa6" fill-opacity=".45" stroke="#f7b9c2" stroke-width="1.2"/>
@@ -205,9 +245,11 @@ canvas#ecg{width:100%;height:84px;display:block;
         </g>
       </g>
 
+      <g id="L-dmg" style="pointer-events:none"></g>
+
       <g id="L-nerv">
         <g id="nerves" data-organ="nervos"></g>
-        <path data-organ="medula" id="cord" d="M200,94 L200,470" stroke="#ffd36b" stroke-width="3.5" stroke-opacity=".55" fill="none"/>
+        <path data-organ="medula" d="M200,94 L200,470" stroke="#ffd36b" stroke-width="3.5" stroke-opacity=".55" fill="none"/>
         <g data-organ="cerebro">
           <ellipse id="brainHalo" cx="200" cy="66" rx="40" ry="32" fill="#ffd36b" opacity="0" filter="url(#blur6)"/>
           <ellipse cx="200" cy="66" rx="36" ry="30" fill="#e8a7b5" fill-opacity=".55" stroke="#f5c6d0" stroke-width="1.2"/>
@@ -215,8 +257,16 @@ canvas#ecg{width:100%;height:84px;display:block;
           <ellipse cx="214" cy="96" rx="13" ry="7" fill="#d38f9d" fill-opacity=".6"/>
         </g>
       </g>
+      <circle id="inj" r="12" fill="none" stroke-width="3" opacity="0"/>
+      </g>
     </svg>
-    <div class="hint">Toque em qualquer órgão para ver o que ele está fazendo agora.</div>
+    <div class="over" id="over" hidden>
+      <h2 id="oT">Parada cardíaca</h2>
+      <p id="oP"></p>
+      <p id="oS" style="font-size:12.5px;color:var(--muted)"></p>
+      <button id="oR">Reiniciar simulação</button>
+    </div>
+    <div class="hint">Toque em qualquer órgão para ver o que ele está fazendo agora. Manchas vermelhas mostram lesão.</div>
   </main>
 
   <aside class="monitor">
@@ -227,6 +277,15 @@ canvas#ecg{width:100%;height:84px;display:block;
     <section class="ecgbox">
       <div class="row"><h3 class="lbl" style="margin:0">ECG · derivação II</h3><span class="mono" id="ecgHr" style="color:var(--ok)">72 bpm</span></div>
       <canvas id="ecg"></canvas>
+    </section>
+    <section>
+      <h3 class="lbl">Substâncias no corpo</h3>
+      <ul class="active" id="active"></ul>
+      <p class="empty" id="noSubs">Nenhuma substância no corpo agora.</p>
+    </section>
+    <section>
+      <h3 class="lbl">Lesão dos órgãos</h3>
+      <div class="organs" id="organs"></div>
     </section>
     <section class="info" id="info" aria-live="polite">
       <div class="sys" id="iSys">Circulatório</div>
@@ -248,6 +307,7 @@ const NS='http://www.w3.org/2000/svg';
 function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
 const mir=d=>{let i=0;return d.replace(/-?\d+(\.\d+)?/g,n=>(i++%2===0)?String(400-parseFloat(n)):n)};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const pos=x=>Math.max(0,x);
 const lerp=(a,b,t)=>a+(b-a)*t;
 function mixHex(a,b,t){t=clamp(t,0,1);const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const A=p(a),B=p(b);return'#'+A.map((v,i)=>Math.round(lerp(v,B[i],t)).toString(16).padStart(2,'0')).join('')}
 
@@ -259,107 +319,293 @@ const pts=R.concat(R.slice().reverse().map(([x,y])=>[400-x,y]));
     d+=`C${f(p1[0]+(p2[0]-p0[0])/6)},${f(p1[1]+(p2[1]-p0[1])/6)} ${f(p2[0]-(p3[0]-p1[0])/6)},${f(p2[1]-(p3[1]-p1[1])/6)} ${p2[0]},${p2[1]}`}
   $('#skin').setAttribute('d',d+'Z')})();
 
-/* suor */
 [[178,40],[222,46],[268,300],[132,300],[268,420],[132,420],[300,250],[100,250]].forEach(([x,y])=>
   el('path',{d:`M${x},${y} c-3,5 -3,8 0,8 c3,0 3,-3 0,-8z`,fill:'#bfe9ff'},$('#sweat')));
 
-/* músculos */
 const muscG=$('#L-musc');const muscles=[];
 [[250,600,14,50],[250,762,10,36],[296,290,9,32],[317,440,7,30]].forEach(([x,y,rx,ry])=>{
   [x,400-x].forEach(cx=>muscles.push(el('ellipse',{cx,cy:y,rx,ry,fill:'#d6455a','fill-opacity':.15,stroke:'#f07080','stroke-opacity':.3},muscG)))});
 
-/* vasos e nervos (lado direito do corpo é desenhado e espelhado) */
-const flows=[];
-function flow(g,d,o,speed){const p=el('path',Object.assign({d,fill:'none','stroke-linecap':'round'},o),g);flows.push({el:p,off:0,speed});return p}
-const S={};
-const pulseRef={v:0};
+/* ---------- vasos, nervos e fluxos ---------- */
+const flows=[];const S={};const pulseRef={v:0};
+function flow(g,d,o,speed){const p=el('path',Object.assign({d,fill:'none','stroke-linecap':'round'},o),g);const f={el:p,off:0,speed};flows.push(f);return p}
 const artSp=()=>(18+S.hr*.5)*(1+1.8*pulseRef.v);
 const venSp=()=>10+S.hr*.3;
 const artStyle={stroke:'#ff4d5e','stroke-width':2.2,'stroke-dasharray':'5 7','stroke-opacity':.9};
 const venStyle={stroke:'#4c8dff','stroke-width':2.2,'stroke-dasharray':'4 8','stroke-opacity':.85};
 const arts=$('#arts'),veins=$('#veins'),nerv=$('#nerves');
-['M210,250 C214,232 206,222 202,232 L203,452',
- 'M203,388 L178,388 M203,388 L222,388',
- 'M168,272 C186,274 200,271 208,263'].forEach(d=>flow(arts,d,artStyle,artSp));
-['M203,452 C212,520 234,600 242,700 C246,780 244,840 248,870',
- 'M206,230 C208,190 208,150 210,110 C212,90 208,70 204,56',
- 'M208,232 C240,200 276,198 292,236 C302,290 308,380 318,450 C324,490 330,520 334,540'].forEach(d=>{flow(arts,d,artStyle,artSp);flow(arts,mir(d),artStyle,artSp)});
-flow(veins,'M206,258 C196,250 186,248 170,252 M212,252 C222,246 232,246 240,252',venStyle,venSp);
-['M240,872 C236,840 238,780 234,700 C228,600 206,520 197,452',
- 'M210,58 C216,80 216,110 214,150 C212,190 210,220 206,250',
- 'M328,544 C322,520 316,490 310,452 C300,380 294,290 286,244 C272,212 236,214 206,246'].forEach(d=>{flow(veins,d,venStyle,venSp);flow(veins,mir(d),venStyle,venSp)});
-flow(veins,'M197,452 L197,290 C197,278 200,270 206,266',venStyle,venSp);
+const artEls=[],venEls=[];
+['M210,250 C214,232 206,222 202,232 L203,452','M203,388 L178,388 M203,388 L222,388','M168,272 C186,274 200,271 208,263'].forEach(d=>artEls.push(flow(arts,d,artStyle,artSp)));
+['M203,452 C212,520 234,600 242,700 C246,780 244,840 248,870','M206,230 C208,190 208,150 210,110 C212,90 208,70 204,56',
+ 'M208,232 C240,200 276,198 292,236 C302,290 308,380 318,450 C324,490 330,520 334,540'].forEach(d=>{artEls.push(flow(arts,d,artStyle,artSp),flow(arts,mir(d),artStyle,artSp))});
+venEls.push(flow(veins,'M206,258 C196,250 186,248 170,252 M212,252 C222,246 232,246 240,252',venStyle,venSp));
+['M240,872 C236,840 238,780 234,700 C228,600 206,520 197,452','M210,58 C216,80 216,110 214,150 C212,190 210,220 206,250',
+ 'M328,544 C322,520 316,490 310,452 C300,380 294,290 286,244 C272,212 236,214 206,246'].forEach(d=>{venEls.push(flow(veins,d,venStyle,venSp),flow(veins,mir(d),venStyle,venSp))});
+venEls.push(flow(veins,'M197,452 L197,290 C197,278 200,270 206,266',venStyle,venSp));
 
 const nerStyle={stroke:'#ffd36b','stroke-width':1.4,'stroke-dasharray':'2 12','stroke-opacity':.9};
 const nerSp=()=>20+S.brain*140;
 ['M200,180 C236,186 280,196 298,246 C308,300 314,400 326,470 C332,505 336,525 338,545',
  'M200,470 C214,530 238,610 246,700 C250,780 248,840 258,872'].forEach(d=>{flow(nerv,d,nerStyle,nerSp);flow(nerv,mir(d),nerStyle,nerSp)});
-flow(nerv,'M198,100 C194,160 192,220 206,258 C214,290 224,320 236,340',Object.assign({},nerStyle,{stroke:'#ffe9a8'}),()=>12+S.intestine*0.6);
+flow(nerv,'M198,100 C194,160 192,220 206,258 C214,290 224,320 236,340',Object.assign({},nerStyle,{stroke:'#ffe9a8'}),()=>12+S.intestine*.6);
 flow($('#L-nerv'),'M200,94 L200,470',nerStyle,nerSp);
 
-/* fluxos dos órgãos */
-const air=flows.push({el:$('#airflow'),off:0,speed:()=>S.airDir*(S.hold?0:30+S.rr*2)});
+flows.push({el:$('#airflow'),off:0,speed:()=>S.airDir*(S.hold?0:30+S.rr*2)});
+let smIntFlow;
 ['#smInt','#lgInt'].forEach((id,i)=>{const p=$(id);const c=p.cloneNode();c.removeAttribute('data-organ');c.removeAttribute('id');
   c.setAttribute('stroke',i?'#7a4a34':'#c97a5e');c.setAttribute('stroke-width',i?3:2);c.setAttribute('stroke-dasharray','3 9');c.style.pointerEvents='none';
-  p.after(c);flows.push({el:c,off:0,speed:()=>i?3+S.intestine*0.05:(S.intestine>.5?16:1.5)})});
+  p.after(c);if(!i)smIntFlow=c;flows.push({el:c,off:0,speed:()=>i?3+S.intestine*.05+S.diar*20:(S.intestine>.5||S.gutSub?16:1.5)+S.diar*30})});
 (function(){const u=$('#ureters');const c=u.cloneNode();c.removeAttribute('data-organ');c.setAttribute('stroke','#fff1a0');c.setAttribute('stroke-dasharray','2 8');c.setAttribute('stroke-width',1.6);c.style.pointerEvents='none';u.after(c);flows.push({el:c,off:0,speed:()=>S.urine*10})})();
 flows.push({el:$('#urethra'),off:0,speed:()=>60});
 
-/* ---------- estado fisiológico ---------- */
+/* manchas de lesão */
+const DMGPOS={figado:[[188,332,44,24]],rins:[[170,390,14,20],[230,390,14,20]],cerebro:[[200,66,40,32]],coracao:[[211,262,24,24]],
+  pulmoes:[[166,265,24,50],[236,265,24,50]],digestivo:[[206,240,9,70],[238,350,26,28],[200,440,38,42]],nervos:[[200,280,7,190],[200,60,30,20]],sangue:[]};
+const dmgEls={};for(const k in DMGPOS)dmgEls[k]=DMGPOS[k].map(([cx,cy,rx,ry])=>el('ellipse',{cx,cy,rx,ry,fill:'#ff2a2a',opacity:0,filter:'url(#blur6)'},$('#L-dmg')));
+
+/* ---------- substâncias ---------- */
+const D=(E,o,v)=>{E.dmg[o]=(E.dmg[o]||0)+v};
+const SUBS=[
+{id:'agua',n:'Água em excesso',cat:'Do dia a dia',col:'#9fdcff',via:'oral',ka:.08,half:90,lag:2,
+ d:'Litros de água em pouco tempo diluem o sódio do sangue. A água entra nos neurônios e o cérebro incha dentro do crânio.',
+ tr:{n:'Restrição de líquidos + soro hipertônico',k:['clear']},
+ fx:(c,g,s,E)=>{E.na-=14*c;E.diur+=3*c;E.hyd+=.6*c;E.gi+=.4*pos(c-1)},
+ m:[[()=>S.na<132,'Sódio caindo: dor de cabeça e náusea'],[()=>S.na<122,'Edema cerebral: o cérebro incha e pressiona o crânio']]},
+{id:'cafeina',n:'Cafeína',cat:'Do dia a dia',col:'#c8925a',via:'oral',ka:.05,half:300,lag:5,
+ d:'Bloqueia a adenosina, o sinal químico do cansaço. Em dose extrema causa arritmia e convulsão.',
+ tr:{n:'Carvão ativado + suporte',k:['gut','clear'],x:2},
+ fx:(c,g,s,E)=>{E.hr+=16*c;E.sys+=8*c;E.stim+=.3*c;E.diur+=.5*c;E.temp+=.2*c;E.sweat+=.15*c;E.gi+=.35*pos(c-1);E.arr+=.5*pos(c-1.4);E.seiz+=.5*pos(c-2)},
+ m:[[(s,c)=>c>.2,'Cafeína bloqueando a adenosina: mais alerta, coração mais rápido'],[(s,c)=>c>1.4,'Palpitações e tremores: excesso de cafeína']]},
+{id:'alcool',n:'Álcool (etanol)',cat:'Do dia a dia',col:'#e9d27a',via:'oral',ka:.04,half:120,lag:3,
+ d:'Deprime o sistema nervoso, dilata os vasos da pele e inibe o hormônio ADH. Em dose extrema desliga o centro da respiração.',
+ tr:{n:'Glicose + proteção das vias aéreas',k:['support'],glu:40},
+ fx:(c,g,s,E)=>{E.dep+=.35*c;E.hr+=8*c;E.sys-=6*c;E.flush+=.6*c;E.temp-=.25*c;E.diur+=.8*c;E.glu-=.12*c;E.gi+=.6*pos(c-1);E.rr-=7*pos(c-1.6);E.dep+=.4*pos(c-1.8);D(E,'figado',.01*c);D(E,'cerebro',.04*pos(c-2))},
+ m:[[(s,c)=>c>.3,'Álcool no sangue: reflexos mais lentos e pele quente (vasodilatação)'],[(s,c)=>c>.8,'O álcool inibe o ADH: os rins produzem mais urina'],[(s,c)=>c>1.8,'Centro respiratório deprimido: risco de coma alcoólico']]},
+{id:'acucar',n:'Açúcar puro',cat:'Do dia a dia',col:'#fff0c8',via:'oral',ka:.1,half:40,
+ d:'Glicose entra rápido no sangue. O pâncreas responde com uma onda de insulina.',
+ tr:{n:'Insulina',k:['clear'],x:3},
+ fx:(c,g,s,E)=>{E.glu+=7*c;E.gi+=.3*pos(c-1.5)},
+ m:[[()=>S.glu>180,'Glicose acima de 180: os rins começam a perder açúcar na urina']]},
+{id:'sal',n:'Sal em excesso',cat:'Do dia a dia',col:'#f4f4f4',via:'oral',ka:.05,half:240,
+ d:'O sódio sobe e puxa água de dentro das células. Neurônios desidratados encolhem.',
+ tr:{n:'Água livre + soro glicosado',k:['clear'],hyd:20},
+ fx:(c,g,s,E)=>{E.na+=12*c;E.sys+=10*c;E.hyd-=.06*c;E.gi+=.5*pos(c-.8)},
+ m:[[()=>S.na>148,'Sódio alto: muita sede, água saindo das células'],[()=>S.na>160,'Hipernatremia grave: neurônios desidratados']]},
+{id:'nicotina',n:'Nicotina',cat:'Do dia a dia',col:'#a6c16a',via:'oral',ka:.12,half:120,
+ d:'Estimula receptores de acetilcolina. Em excesso passa a bloqueá-los e os músculos param.',
+ tr:{n:'Carvão ativado + atropina',k:['gut','block']},
+ fx:(c,g,s,E)=>{E.hr+=18*c-45*pos(c-2);E.sys+=12*c;E.gi+=.45*c;E.sweat+=.3*c;E.sal+=.4*c;E.stim+=.2*c;E.seiz+=.5*pos(c-1.5);E.para+=.7*pos(c-1.8)},
+ m:[[(s,c)=>c>.3,'Nicotina estimulando receptores: coração e pressão sobem'],[(s,c)=>c>1.6,'Excesso de nicotina: os receptores ficam bloqueados e os músculos enfraquecem']]},
+{id:'pimenta',n:'Capsaicina (pimenta extrema)',cat:'Do dia a dia',col:'#ff5a3c',via:'oral',ka:.08,half:60,
+ d:'Ativa os sensores de calor (TRPV1). O corpo reage como se estivesse queimando, sem fogo nenhum.',
+ tr:{n:'Leite (a caseína arrasta a capsaicina)',k:['gut','block']},
+ fx:(c,g,s,E)=>{E.sweat+=.8*c;E.hr+=8*c;E.gi+=.3*c;E.sal+=.6*c;E.flush+=.4*c;D(E,'digestivo',.01*pos(c-2))},
+ m:[[(s,c)=>c>.2,'Capsaicina ativando os sensores de calor: o cérebro acha que a boca está queimando'],[(s,c)=>c>.6,'Suor e salivação para esfriar um calor que não existe']]},
+{id:'vitc',n:'Vitamina C (megadose)',cat:'Do dia a dia',col:'#ffb23c',via:'oral',ka:.03,half:60,bio:.4,
+ d:'O corpo não estoca vitamina C. O excesso sai na urina, e o que não é absorvido puxa água para o intestino.',
+ tr:{n:'Hidratação + suspender',k:['clear']},
+ fx:(c,g,s,E)=>{E.dia+=.5*pos(c-.3);E.gi+=.2*c;E.diur+=.3*c;D(E,'rins',.01*pos(c-.8))},
+ m:[[(s,c)=>c>.1,'Vitamina C absorvida: o excesso vai direto para a urina'],[(s,c)=>c>.4,'Diarreia osmótica: o intestino não dá conta de absorver tudo']]},
+{id:'paracetamol',n:'Paracetamol (excesso)',cat:'Remédios e hormônios',col:'#e6e6ff',via:'oral',ka:.1,half:150,
+ d:'Seguro na dose certa. Em excesso, o fígado gera um metabólito tóxico (NAPQI). A lesão grave só aparece 1 a 3 dias depois. Use 1 s = 1 hora.',
+ tr:{n:'N-acetilcisteína (funciona melhor nas primeiras 8 h)',k:['block']},
+ fx:(c,g,s,E,dm)=>{E.gi+=.15*c*(s.t<720?1:0);if(!s.blk)s.m+=pos(c-.45)*dm*.004;else s.m*=1-.004*dm;s.m*=1-.0005*dm;
+   if(s.t>900){D(E,'figado',.6*s.m);D(E,'rins',.1*s.m);E.gi+=.6*Math.min(1,s.m*5)}},
+ m:[[s=>s.blood>.45&&s.t>20,'Paracetamol acima do limite: a glutationa do fígado está se esgotando (ainda sem sintomas)'],[s=>s.t>240&&s.m<.01,'Dose terapêutica: o fígado processou tudo sem problema'],[s=>s.t>900&&s.m>.05,'Lesão do fígado começando: as enzimas hepáticas disparam'],[()=>S.dmg.figado>55,'Insuficiência hepática: a pele fica amarelada (icterícia)']]},
+{id:'insulina',n:'Insulina (dose alta)',cat:'Remédios e hormônios',col:'#b6e3ff',via:'injetado',ka:.05,half:60,
+ d:'Empurra a glicose do sangue para dentro das células. Sem glicose, o cérebro desliga primeiro.',
+ tr:{n:'Glicose 50% na veia',k:['block'],glu:80},
+ fx:(c,g,s,E)=>{E.glu-=5*c},
+ m:[[()=>S.glu<70,'Hipoglicemia: tremor, suor frio e fome'],[()=>S.glu<45,'Neuroglicopenia: o cérebro está sem combustível']]},
+{id:'adrenalina',n:'Adrenalina',cat:'Remédios e hormônios',col:'#ff9f4a',via:'injetado',ka:.6,half:4,
+ d:'O hormônio da luta ou fuga em dose concentrada. Efeito forte e curto.',
+ tr:{n:'Betabloqueador + vasodilatador',k:['block']},
+ fx:(c,g,s,E)=>{E.hr+=45*c;E.sys+=40*c;E.glu+=1*c;E.stim+=.4*c;E.sweat+=.2*c;E.arr+=.6*pos(c-1.2);D(E,'coracao',.25*pos(c-1.5))},
+ m:[[(s,c)=>c>.3,'Luta ou fuga: coração dispara e o fígado libera glicose'],[(s,c)=>c>1.3,'Arritmia induzida por adrenalina']]},
+{id:'mercurio',n:'Mercúrio líquido (engolido)',cat:'Metais pesados',col:'#c9d1d9',via:'oral',ka:.02,bio:.0002,half:3000,gx:.006,
+ d:'O mercúrio de termômetro, engolido, quase não é absorvido: atravessa o intestino e sai nas fezes. O perigo real é o vapor.',
+ tr:{n:'Observação: deixar o intestino eliminar',k:['gut']},
+ fx:(c,g,s,E)=>{E.gi+=.03*g},
+ m:[[()=>true,'Mercúrio líquido no estômago: denso, ele desce pelo intestino quase sem ser absorvido'],[s=>s.t>180,'Depois de horas, menos de 0,01% entrou no sangue. Engolido, o mercúrio metálico é pouco tóxico']]},
+{id:'mercvapor',n:'Vapor de mercúrio (inalado)',cat:'Metais pesados',col:'#aeb8c4',via:'inalado',ka:.25,bio:.8,half:3000,
+ d:'Respirado, 80% do mercúrio passa para o sangue, atravessa até o cérebro e se acumula nos rins.',
+ tr:{n:'Quelante (DMPS) + oxigênio',k:['clear'],x:4},
+ fx:(c,g,s,E)=>{D(E,'pulmoes',.04*c);E.rr+=6*c;E.spo2-=5*c;E.gi+=.2*c;E.seiz+=.1*pos(c-1.5);D(E,'rins',.015*c);D(E,'nervos',.012*c);D(E,'cerebro',.006*c)},
+ m:[[(s,c)=>c>.2,'Vapor de mercúrio passando dos alvéolos para o sangue'],[(s,c)=>c>.6,'Pneumonite química: os pulmões inflamam'],[s=>s.t>600,'Mercúrio chegando ao cérebro e aos rins: tremores e irritabilidade']]},
+{id:'metilmerc',n:'Metilmercúrio (peixe contaminado)',cat:'Metais pesados',col:'#8fa3b8',via:'oral',ka:.05,bio:.95,half:6000,
+ d:'A forma orgânica do mercúrio. Quase 100% é absorvida e ela vai direto para o sistema nervoso. Efeito lento, ao longo de dias.',
+ tr:{n:'Quelante (DMSA)',k:['clear'],x:3},
+ fx:(c,g,s,E)=>{D(E,'nervos',.02*c);D(E,'cerebro',.008*c)},
+ m:[[(s,c)=>c>.2,'Metilmercúrio atravessando a barreira do cérebro'],[()=>S.dmg.nervos>20,'Formigamento nas mãos e na boca, visão em túnel']]},
+{id:'chumbo',n:'Chumbo',cat:'Metais pesados',col:'#7b8794',via:'oral',ka:.01,bio:.3,half:4000,
+ d:'O chumbo se passa por cálcio: entra nos ossos, nos nervos e na medula óssea, onde trava a produção de hemoglobina.',
+ tr:{n:'Quelante (EDTA cálcico)',k:['clear'],x:4},
+ fx:(c,g,s,E)=>{D(E,'sangue',.03*c);E.gi+=.35*c;D(E,'nervos',.01*c);D(E,'rins',.01*c);E.sys+=6*c},
+ m:[[(s,c)=>c>.1,'Chumbo imitando o cálcio e se espalhando pelos tecidos'],[(s,c)=>c>.4,'Cólica abdominal do chumbo (cólica saturnina)'],[()=>S.dmg.sangue>15,'Anemia: a produção de hemoglobina está bloqueada']]},
+{id:'arsenico',n:'Arsênico',cat:'Metais pesados',col:'#d6e1a8',via:'oral',ka:.06,half:600,
+ d:'Ataca o intestino e o metabolismo das células. Causa diarreia violenta e deixa o coração instável.',
+ tr:{n:'Dimercaprol + reidratação na veia',k:['clear'],x:4,hyd:25},
+ fx:(c,g,s,E)=>{E.gi+=.8*c;E.dia+=.9*c;E.hyd-=.35*c;E.arr+=.6*pos(c-.8);D(E,'digestivo',.04*c);D(E,'figado',.015*c);D(E,'rins',.02*c);D(E,'coracao',.03*pos(c-1));D(E,'nervos',.01*c)},
+ m:[[(s,c)=>c>.2,'Arsênico: vômitos e diarreia em "água de arroz"'],[()=>S.hyd<60,'Perda grave de líquido pela diarreia'],[(s,c)=>c>.9,'QT longo no ECG: o coração fica instável']]},
+{id:'cianeto',n:'Cianeto',cat:'Venenos e químicos',col:'#9be3ff',via:'oral',ka:.4,half:50,
+ d:'Trava a respiração dentro das células. O sangue continua cheio de oxigênio, mas nenhuma célula consegue usá-lo.',
+ tr:{n:'Hidroxocobalamina (vitamina B12a)',k:['block','clear'],x:5},
+ fx:(c,g,s,E)=>{E.cell+=.55*c;E.rr+=14*c;E.hr+=20*c;E.arr+=.5*pos(c-1);E.gi+=.3*c},
+ m:[[(s,c)=>c>.15,'Cianeto travou a citocromo-oxidase: as células não usam o oxigênio'],[(s,c)=>c>.3,'Sangue das veias continua vermelho: o oxigênio sobra sem ser usado'],[()=>S.cell>.6,'Acidose láctica: respiração rápida tentando compensar']]},
+{id:'co',n:'Monóxido de carbono',cat:'Venenos e químicos',col:'#ff6f91',via:'inalado',ka:.3,half:300,
+ d:'Gruda na hemoglobina 200 vezes mais forte que o oxigênio. A pele fica rosada e o oxímetro mente.',
+ tr:{n:'Oxigênio a 100% (ou câmara hiperbárica)',k:['clear'],x:4},
+ fx:(c,g,s,E)=>{E.cohb+=28*c},
+ m:[[()=>S.cohb>10,'CO ocupando a hemoglobina: dor de cabeça'],[()=>S.cohb>20,'O oxímetro ainda mostra saturação normal: ele não distingue CO de O₂'],[()=>S.cohb>40,'Confusão e desmaio: o cérebro está sem oxigênio']]},
+{id:'metanol',n:'Metanol',cat:'Venenos e químicos',col:'#d8f0ff',via:'oral',ka:.1,half:1200,
+ d:'Parece uma bebedeira comum. Horas depois o fígado o transforma em ácido fórmico, que ataca o nervo óptico. Use 1 s = 1 hora.',
+ tr:{n:'Fomepizol + hemodiálise',k:['block','clear'],x:5},
+ fx:(c,g,s,E,dm)=>{E.dep+=.25*c;if(!s.blk)s.m+=c*dm*.0012;s.m*=1-.0008*dm;if(s.t>360){E.acid+=s.m*1.2;D(E,'nervos',.08*s.m);D(E,'cerebro',.04*s.m);E.gi+=.4*Math.min(1,s.m*3)}},
+ m:[[(s,c)=>c>.2,'Metanol no sangue: o fígado começa a fabricar ácido fórmico'],[s=>s.t>360&&s.m>.1,'Acidose metabólica: respiração profunda e rápida (Kussmaul)'],[()=>S.dmg.nervos>25,'Nervo óptico lesado: visão embaçada, "como neve"']]},
+{id:'etilenoglicol',n:'Etilenoglicol (anticongelante)',cat:'Venenos e químicos',col:'#7fe08a',via:'oral',ka:.1,half:900,
+ d:'Tem gosto doce e embriaga. O fígado o transforma em ácido oxálico, que vira cristais dentro dos rins.',
+ tr:{n:'Fomepizol + hemodiálise',k:['block','clear'],x:5},
+ fx:(c,g,s,E,dm)=>{E.dep+=.25*c;if(!s.blk)s.m+=c*dm*.0012;s.m*=1-.0008*dm;if(s.t>240){E.acid+=s.m;D(E,'rins',.12*s.m);E.seiz+=.3*Math.min(1,s.m*2);E.arr+=.25*Math.min(1,s.m*2)}},
+ m:[[(s,c)=>c>.2,'Etilenoglicol: embriaguez sem cheiro de álcool'],[s=>s.t>240&&s.m>.1,'Cristais de oxalato de cálcio se formando nos rins'],[()=>S.dmg.rins>40,'Insuficiência renal: a produção de urina despenca']]},
+{id:'organofosforado',n:'Organofosforado ("chumbinho")',cat:'Venenos e químicos',col:'#b58cff',via:'oral',ka:.1,half:700,
+ d:'Bloqueia a enzima que limpa a acetilcolina. Todas as sinapses ficam ligadas ao mesmo tempo.',
+ tr:{n:'Atropina + pralidoxima',k:['block']},
+ fx:(c,g,s,E)=>{E.sal+=.8*c;E.sweat+=.6*c;E.hr-=28*c;E.gi+=.6*c;E.dia+=.5*c;E.spo2-=12*c;E.para+=.8*pos(c-.6);E.seiz+=.5*pos(c-1.2);E.rr+=6*c},
+ m:[[(s,c)=>c>.15,'Acetilcolinesterase bloqueada: acetilcolina acumulando nas sinapses'],[(s,c)=>c>.3,'Salivação, suor, pupilas puntiformes e coração lento'],[(s,c)=>c>.7,'Secreção nos brônquios e músculos respiratórios fracos']]},
+{id:'soda',n:'Soda cáustica',cat:'Venenos e químicos',col:'#e8e8e8',via:'oral',ka:.01,bio:0,half:600,gx:.03,caustic:1,
+ d:'Não precisa ser absorvida para destruir: dissolve o esôfago e o estômago por onde passa. Vomitar queima tudo de novo.',
+ tr:{n:'Endoscopia e jejum (nunca provocar vômito)',k:['gut']},
+ fx:(c,g,s,E)=>{D(E,'digestivo',.6*g);E.gi+=.5*Math.min(1,g);E.sal+=.6*Math.min(1,g)},
+ m:[[()=>true,'Queimadura alcalina: a soda dissolve os tecidos (necrose de liquefação)'],[()=>S.dmg.digestivo>75,'Perfuração: o conteúdo vaza para o abdômen e o corpo entra em choque']]},
+{id:'amanita',n:'Cogumelo Amanita phalloides',cat:'Toxinas da natureza',col:'#c9d77a',via:'oral',ka:.03,half:900,
+ d:'O "chapéu da morte". Tem três fases: vômitos, uma falsa melhora e, dias depois, a falência do fígado. Use 1 s = 1 hora.',
+ tr:{n:'Silibinina + carvão ativado repetido',k:['block','gut','clear'],x:2},
+ fx:(c,g,s,E,dm)=>{if(!s.blk)s.m+=c*dm*.0015;s.m*=1-.0003*dm;const t=s.t;
+   if(t>360&&t<1500){const k=Math.min(1,s.m*8);E.gi+=.9*k;E.dia+=.9*k;E.hyd-=.3*k}
+   if(t>2400){D(E,'figado',.25*s.m);D(E,'rins',.06*s.m)}},
+ m:[[s=>s.t>360,'Fase 1: vômitos e diarreia violentos'],[s=>s.t>1500,'Fase 2: falsa melhora. A amatoxina continua destruindo o fígado em silêncio'],[s=>s.t>2400&&S.dmg.figado>20,'Fase 3: falência do fígado e dos rins']]},
+{id:'ttx',n:'Tetrodotoxina (baiacu)',cat:'Toxinas da natureza',col:'#6fd3c6',via:'oral',ka:.1,half:300,
+ d:'Bloqueia os canais de sódio dos nervos. A paralisia sobe pelo corpo, mas a pessoa continua consciente.',
+ tr:{n:'Sem antídoto: ventilação mecânica até eliminar',k:['support']},
+ fx:(c,g,s,E)=>{E.para+=.9*c;E.sys-=20*c;E.hr-=15*c;E.gi+=.3*c},
+ m:[[(s,c)=>c>.1,'Formigamento nos lábios e na língua'],[(s,c)=>c>.5,'Paralisia subindo pelo corpo. A pessoa continua consciente'],[(s,c)=>c>.9,'Músculos respiratórios paralisados']]},
+{id:'botulinica',n:'Toxina botulínica',cat:'Toxinas da natureza',col:'#8ad1a0',via:'oral',ka:.004,half:5000,
+ d:'A toxina mais potente conhecida. Impede os nervos de soltar acetilcolina. A paralisia desce da cabeça ao diafragma. Use 1 s = 1 hora.',
+ tr:{n:'Antitoxina botulínica + ventilação',k:['block','support']},
+ fx:(c,g,s,E)=>{E.para+=Math.min(1,1.6*c);E.gi+=.2*c},
+ m:[[(s,c)=>c>.08,'Toxina presa às terminações nervosas'],[(s,c)=>c>.3,'Visão dupla, pálpebras caídas, dificuldade para engolir'],[(s,c)=>c>.6,'Paralisia descendo até o diafragma']]},
+{id:'jararaca',n:'Veneno de jararaca (picada)',cat:'Toxinas da natureza',col:'#b8763a',via:'picada',ka:.15,half:700,
+ d:'Consome os fatores de coagulação: o sangue deixa de coagular. Engolido, quase não faria efeito, porque seria digerido.',
+ tr:{n:'Soro antibotrópico',k:['block','clear'],x:4},
+ fx:(c,g,s,E)=>{const b=Math.min(1,.8*c);E.bleed+=b;E.sys-=30*b;E.hr+=25*b;D(E,'rins',.03*c);D(E,'sangue',.03*c);E.gi+=.2*c},
+ m:[[()=>true,'Picada na perna: dor forte e inchaço no local'],[(s,c)=>c>.2,'Veneno consumindo o fibrinogênio: o sangue para de coagular'],[(s,c)=>c>.7,'Sangramento pela gengiva e pela urina; rins sob ataque']]}];
+const SUB={};SUBS.forEach(s=>SUB[s.id]=s);
+const DOSES=[[.35,'pequena'],[1,'moderada'],[2.5,'extrema']];
+const VERB={oral:'Ingerir',inalado:'Inalar',injetado:'Injetar',picada:'Simular picada'};
+const VIA={oral:'via oral',inalado:'inalado',injetado:'injetado',picada:'picada de cobra'};
+
+/* ---------- estado ---------- */
 const ACT={dormir:{hr:56,rr:12,met:.9,brain:.25,txt:'Dormindo'},repouso:{hr:72,rr:14,met:1,brain:.6,txt:'Em repouso'},
   caminhar:{hr:102,rr:20,met:3,brain:.75,txt:'Caminhando'},correr:{hr:150,rr:32,met:8,brain:.9,txt:'Correndo'}};
-function init(){return{act:'repouso',hr:72,rr:14,spo2:98,co2:40,sys:118,dia:76,temp:36.7,glu:92,insulin:0,hyd:85,bladder:120,
+const ORG=[['cerebro','Cérebro'],['coracao','Coração'],['pulmoes','Pulmões'],['figado','Fígado'],['rins','Rins'],['digestivo','Trato digestivo'],['nervos','Nervos'],['sangue','Sangue']];
+function init(){const dmg={};ORG.forEach(([k])=>dmg[k]=0);
+  return{act:'repouso',hr:72,rr:14,spo2:98,co2:40,sys:118,dia:76,temp:36.7,glu:92,insulin:0,hyd:85,bladder:120,
   stomach:0,stomachWater:0,intestine:0,energy:80,env:24,hold:false,holdTime:0,adren:0,clock:8*60,brPh:0,airDir:1,
-  liver:0,urine:1,sweat:0,shiver:false,brain:.6,urinating:false,boluses:[]}}
+  liver:0,urine:1,sweat:0,sweatT:0,shiver:false,brain:.6,urinating:false,boluses:[],vom:[],
+  na:140,cohb:0,cell:0,acid:0,ph:7.4,cons:100,vf:1,vent:false,arr:0,para:0,seiz:0,bleed:0,flush:0,diar:0,realO2:98,
+  dmg,subs:[],taken:[],dead:null,vfT:0,shockT:0,lastVom:-99,inhT:0,inhCol:'#e8fbff',injT:0,gutSub:null,uid:0}}
 Object.assign(S,init());
 let speed=1;
 
-/* ---------- registro de eventos ---------- */
+/* ---------- registro ---------- */
 const cool={};
-function fmtClock(m){m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(Math.floor(m%60)).padStart(2,'0')}
-function log(key,msg,cd=30){const now=performance.now()/1000;if(cool[key]&&now-cool[key]<cd)return;cool[key]=now;
+function fmtClock(m){const d=Math.floor(m/1440);m=((m%1440)+1440)%1440;return(d>0?`dia ${d+1} `:'')+String(Math.floor(m/60)).padStart(2,'0')+':'+String(Math.floor(m%60)).padStart(2,'0')}
+function log(key,msg,cd=30){const now=performance.now()/1000;if(key){if(cool[key]&&now-cool[key]<cd)return;cool[key]=now}
   const li=document.createElement('li');li.innerHTML=`<b>${fmtClock(S.clock)}</b><span></span>`;li.lastChild.textContent=msg;
-  const L=$('#log');L.prepend(li);while(L.children.length>8)L.lastChild.remove()}
+  const L=$('#log');L.prepend(li);while(L.children.length>10)L.lastChild.remove()}
 
 /* ---------- simulação ---------- */
+function newE(){return{hr:0,rr:0,sys:0,temp:0,dep:0,stim:0,spo2:0,cell:0,glu:0,hyd:0,na:0,diur:0,gi:0,dia:0,seiz:0,para:0,arr:0,bleed:0,sweat:0,sal:0,cohb:0,acid:0,flush:0,dmg:{}}}
+function addD(o,v){S.dmg[o]=clamp(S.dmg[o]+v,0,100)}
 function step(dt){
-  const a=ACT[S.act];const sm=dt*speed; S.clock+=sm;
-  S.brain=lerp(S.brain,a.brain+(S.hold?0.15:0),Math.min(1,dt));
+  if(S.dead)return;
+  const a=ACT[S.act];const sm=dt*speed;S.clock+=sm;
+  // substâncias
+  const E=newE();const renal=.3+.7*(1-S.dmg.rins/100);let gutTop=null;
+  for(const s of S.subs){const d=SUB[s.id];s.t+=sm;
+    if(s.t>=(d.lag||0)&&s.gut>0){const ab=s.gut*(1-Math.exp(-d.ka*sm));s.gut-=ab;s.blood+=ab*(d.bio??1)}
+    s.gut*=Math.exp(-(d.gx||.004)*sm);
+    s.blood*=Math.exp(-Math.LN2/d.half*sm*(s.clr||1)*renal);
+    const c=s.blood*(s.blk?.15:1);
+    d.fx(c,s.gut,s,E,sm);
+    d.m.forEach((m,i)=>{if(!s.said[i]&&m[0](s,c)){s.said[i]=1;log(null,m[1])}});
+    if(d.via==='oral'&&s.gut>.05&&(!gutTop||s.gut>gutTop.gut))gutTop=s}
+  S.gutSub=gutTop;
+  S.subs=S.subs.filter(s=>s.blood>.004||s.gut>.004||s.m>.01||s.t<5);
+  // efeitos sistêmicos
+  S.na+=((140+E.na)-S.na)*Math.min(1,sm*.05);
+  S.cohb+=(clamp(E.cohb,0,85)-S.cohb)*Math.min(1,sm*.15);
+  S.cell=clamp(E.cell+S.cohb/110+S.dmg.sangue/250,0,1);
+  S.acid=E.acid+pos(S.cell-.3)*1.3;
+  if(S.dmg.figado>60)E.dep+=(S.dmg.figado-60)/80;
+  if(S.na<128)E.dep+=(128-S.na)/25; if(S.na<118)E.seiz+=(118-S.na)/8;
+  if(S.na>155)E.dep+=(S.na-155)/20; if(S.na>165)E.seiz+=(S.na-165)/8;
+  if(S.glu<55)E.dep+=(55-S.glu)/40; if(S.glu<40)E.seiz+=.5;
+  E.para+=pos(S.dmg.nervos-60)/80;
+  if(S.dmg.digestivo>75){E.sys-=35;E.hr+=30;E.temp+=.8}
+  if(S.hyd<30)E.sys-=(30-S.hyd)*2;
+  if(S.dmg.rins>85)E.arr+=.3;
+  E.arr+=pos(S.acid-.8)*.4+pos(S.dmg.coracao-50)/60+(S.temp>40.5?.3:0)+(S.cell>.7?.4:0);
+  S.arr=clamp(E.arr,0,1);S.para=clamp(E.para,0,1);S.seiz=clamp(E.seiz,0,1);S.bleed=E.bleed;S.flush=E.flush;S.diar=clamp(E.dia,0,1);
+  const vf=S.vent?1:clamp(1-S.para-pos(E.dep-.6)*1.2-.3*S.seiz,0,1);S.vf=vf;
+  S.realO2=S.spo2*(1-S.cohb/100);
+  const consT=clamp(100-E.dep*60-pos(85-S.realO2)*2.2-S.cell*70-S.dmg.cerebro*.7-S.seiz*40+E.stim*5,0,100);
+  S.cons+=(consT-S.cons)*Math.min(1,dt*.6);
+  if(S.cons<45&&(S.act==='caminhar'||S.act==='correr')){setAct('repouso',1);log('faint','Desmaiou: o corpo não consegue se manter de pé',30)}
+  if(S.cons<45&&S.hold)setHold(false);
+  S.brain=lerp(S.brain,clamp((a.brain+(S.hold?.15:0)+E.stim*.3)*S.cons/100+S.seiz*.5,0,1.2),Math.min(1,dt));
   // adrenalina
-  let adT=S.act==='correr'?.8:S.act==='caminhar'?.3:0; if(S.hold&&S.holdTime>20)adT=Math.max(adT,.5); if(S.glu<70)adT=Math.max(adT,.6);
+  let adT=S.act==='correr'?.8:S.act==='caminhar'?.3:0;if(S.hold&&S.holdTime>20)adT=Math.max(adT,.5);if(S.glu<70)adT=Math.max(adT,.6);adT=Math.max(adT,Math.min(.8,S.bleed*.6+pos(100-S.sys)/80));
   S.adren+=(adT-S.adren)*Math.min(1,dt*.5);
   // respiração
-  if(S.hold){
-    S.holdTime+=dt; S.co2+=dt*.35*Math.sqrt(a.met);
+  if(S.hold&&!S.vent){
+    S.holdTime+=dt;S.co2+=dt*.35*Math.sqrt(a.met);
     if(S.holdTime>8)S.spo2-=dt*(.12+.04*a.met);
     if(S.holdTime>10)log('hold1','CO₂ subindo: o tronco cerebral está pedindo ar',60);
     if(S.co2>=58||S.spo2<82){setHold(false);log('reflex','Reflexo respiratório forçou a respiração',5)}
   }else{
-    const rrT=a.rr+Math.max(0,S.co2-40)*1.4+Math.max(0,94-S.spo2)*.8+Math.max(0,S.temp-37.5)*3;
-    S.rr+=(rrT-S.rr)*Math.min(1,dt*.4);
-    S.co2+=(40+(a.met>3?2:0)-S.co2)*Math.min(1,dt*.3);
-    S.spo2+=((a.met>5?97:98)-S.spo2)*Math.min(1,dt*.25);
+    const rrT=a.rr+pos(S.co2-40)*1.4+pos(94-S.spo2)*.8+pos(S.temp-37.5)*3+E.rr+S.acid*12;
+    const rrEff=S.vent?14:pos(rrT*vf);
+    S.rr+=(rrEff-S.rr)*Math.min(1,dt*.4);
+    const spT=clamp((S.vent?98:(a.met>5?97:98)-(1-vf)*70)+E.spo2-S.dmg.pulmoes*.3,15,100);
+    S.spo2+=(spT-S.spo2)*Math.min(1,dt*.25);
+    S.co2+=((40+(a.met>3?2:0)+(1-vf)*45-S.acid*8)-S.co2)*Math.min(1,dt*.3);
   }
-  // coração
-  let hrT=a.hr+(S.temp-36.8)*12+Math.max(0,70-S.hyd)*.6+Math.max(0,95-S.spo2)*1.5+S.adren*10;
+  S.ph=clamp(7.4-S.acid*.22-(S.co2-40)*.008,6.7,7.7);
+  // coração e pressão
+  let hrT=a.hr+(S.temp-36.8)*12+pos(70-S.hyd)*.6+pos(95-S.spo2)*1.5+S.adren*10+E.hr+S.seiz*30+S.cell*25+S.cohb*.4;
   if(S.hold&&S.holdTime>15)hrT-=8;
+  if(S.realO2<60)hrT-=(60-S.realO2)*2.5;
+  hrT=clamp(hrT*(1-S.dmg.coracao/300),20,220);
   S.hr+=(hrT-S.hr)*Math.min(1,dt*.25);
-  const dehy=Math.max(0,65-S.hyd);
-  S.sys+=((112+(S.hr-70)*.35+S.adren*8-dehy*.8)-S.sys)*Math.min(1,dt*.5);
-  S.dia+=((74+(S.hr-70)*.08+S.adren*4-dehy*.4)-S.dia)*Math.min(1,dt*.5);
+  const dehy=pos(65-S.hyd);
+  S.sys+=(pos(112+(S.hr-70)*.35+S.adren*8-dehy*.8+E.sys-S.dmg.coracao*.4)-S.sys)*Math.min(1,dt*.5);
+  S.dia+=(pos(74+(S.hr-70)*.08+S.adren*4-dehy*.4+E.sys*.5-S.dmg.coracao*.25)-S.dia)*Math.min(1,dt*.5);
   // temperatura
-  S.sweat=S.temp>37.15?(S.temp-37.15)*2+(S.env>30?(S.env-30)*.1:0):0;
+  S.sweatT=S.temp>37.15?(S.temp-37.15)*2+(S.env>30?(S.env-30)*.1:0):0;
+  S.sweat=S.sweatT+E.sweat+(S.glu<65?.4:0);
   S.shiver=S.temp<36.3;
-  let tT=36.6+(a.met-1)*.22+(S.env-24)*.035-S.sweat*.15+(S.shiver?.3:0);
+  const tT=36.6+(a.met-1)*.22+(S.env-24)*.035-S.sweatT*.15+(S.shiver?.3:0)+E.temp+S.seiz*.6-S.flush*.15;
   S.temp+=(tT-S.temp)*Math.min(1,sm*.08);
-  if(S.sweat>.15)log('sweat','Pele suando para perder calor',90);
+  if(S.sweat>.15)log('sweat','Pele suando',90);
   if(S.shiver)log('shiver','Tremores musculares para produzir calor',90);
   // água
-  S.hyd-=sm*(.02+S.sweat*.05+(a.met-1)*.005);
+  S.hyd-=sm*(.02+S.sweatT*.05+E.sweat*.02+(a.met-1)*.005+S.diar*.3+S.bleed*.05);
+  S.hyd+=E.hyd*sm;
   const w=Math.min(S.stomachWater,sm*25);S.stomachWater-=w;S.hyd+=w*.06;S.hyd=clamp(S.hyd,0,100);
   if(S.hyd<60)log('hyd','Desidratação: o ADH faz os rins concentrarem a urina',120);
   // rins e bexiga
-  S.urine=.4+1.6*clamp((S.hyd-50)/40,0,1);
+  S.urine=(.4+1.6*clamp((S.hyd-50)/40,0,1))*(1+E.diur+pos((S.glu-180)/100))*(1-S.dmg.rins/100);
   if(S.urinating){S.bladder-=dt*220;if(S.bladder<=4){S.bladder=4;S.urinating=false;log('pee2','Bexiga esvaziada',3)}}
   else S.bladder+=S.urine*sm;
   S.bladder=clamp(S.bladder,0,600);
@@ -370,148 +616,262 @@ function step(dt){
   const emp=Math.min(S.stomach,sm*2);S.stomach-=emp;S.intestine+=emp;
   const abs=Math.min(S.intestine,sm*1.6);S.intestine-=abs;S.glu+=abs*1.4;
   if(had&&S.stomach<=0)log('stE','Estômago vazio: todo o quimo passou ao intestino',5);
-  if(abs>0.05)log('abs','Intestino delgado absorvendo glicose',120);
+  // vômito
+  if(S.gi>.45&&S.clock-S.lastVom>15&&Math.random()<sm*(S.gi-.45)*.6)vomit();
+  S.gi=E.gi;
   // glicose
-  S.insulin+=((Math.max(0,S.glu-95)*.015)-S.insulin)*Math.min(1,sm*.3);
+  S.insulin+=((pos(S.glu-95)*.015)-S.insulin)*Math.min(1,sm*.3);
   S.glu-=S.insulin*sm*3;
   S.glu-=sm*((a.met-1)*.25+.15);
-  S.liver=(S.glu<90?.15+(90-S.glu)*.08:0)+S.adren*.8*(S.glu<110?1:0);
+  S.liver=((S.glu<90?.15+(90-S.glu)*.08:0)+S.adren*.8*(S.glu<110?1:0))*(1-S.dmg.figado/100*.8);
   if(S.energy<=0)S.liver*=.2;
-  S.glu+=S.liver*sm; S.glu=clamp(S.glu,30,400);
+  S.glu+=(S.liver+E.glu)*sm;S.glu=clamp(S.glu,15,450);
   if(S.insulin>.5)log('ins','Pâncreas liberando insulina para baixar a glicose',90);
   if(S.liver>.6)log('liv','Fígado transformando glicogênio em glicose',90);
   if(S.glu<70)log('hypo','Glicemia baixa: adrenalina e glucagon liberados',60);
-  // reservas
-  S.energy+=sm*(-(a.met-1)*.02-S.liver*.08+(S.act==='dormir'?.05:0)+abs*.05);
-  S.energy=clamp(S.energy,0,100);
+  S.energy=clamp(S.energy+sm*(-(a.met-1)*.02-S.liver*.08+(S.act==='dormir'?.05:0)+abs*.05),0,100);
   if(S.energy<20)log('en','Reservas de glicogênio baixas: fadiga muscular',120);
-  // bolo alimentar
+  // lesões
+  for(const o in E.dmg)addD(o,E.dmg[o]*sm);
+  addD('cerebro',sm*(pos(75-S.realO2)*.12+S.cell**2*6+(S.glu<40?(40-S.glu)*.03:0)+(S.na<118?(118-S.na)*.05:0)+(S.na>165?(S.na-165)*.05:0)+S.seiz*.06+pos(S.temp-41)*.5+(S.dmg.figado>90?.03:0)));
+  addD('coracao',sm*(S.arr**2*.5+pos(70-S.realO2)*.03+S.cell**2*4+(S.dmg.rins>85?.06:0)+pos(S.temp-42)*.5));
+  if(!E.dmg.figado)addD('figado',-sm*.004);if(!E.dmg.rins)addD('rins',-sm*.003);
+  // mensagens gerais
+  if(S.seiz>.35)log('seiz','Convulsão: descargas elétricas descontroladas no cérebro',40);
+  if(S.para>.4&&!S.vent)log('para','Músculos respiratórios fracos: a ventilação está caindo',60);
+  if(E.sal>.5)log('sal','Salivação excessiva',120);
+  if(S.cons<70&&S.cons>=40)log('conf','Confuso e desorientado',90);
+  if(S.cons<40)log('unc','Inconsciente (Glasgow 8 ou menos)',90);
+  if(S.dmg.digestivo>75)log('perf','Perfuração no trato digestivo: choque e peritonite',300);
+  if(S.sys<50)S.shockT+=sm;else S.shockT=Math.max(0,S.shockT-sm);
+  // morte
+  if(S.dmg.cerebro>=100)die('Morte encefálica','O cérebro ficou tempo demais sem oxigênio, sem glicose ou sob agressão direta.');
+  else if(S.dmg.coracao>=100)die('Parada cardíaca','O músculo do coração foi lesado demais para continuar bombeando.');
+  else if(S.arr>.9&&Math.random()<sm*.06)die('Fibrilação ventricular','O ritmo elétrico do coração virou caos e o sangue parou de circular.');
+  else if(S.shockT>20)die('Choque irreversível','A pressão ficou baixa demais por muito tempo e os órgãos pararam.');
+  // bolo alimentar e vômito
   if(S.boluses.length){const b=S.boluses[0];b.t+=dt/2.2;
     if(b.t>=1){b.dot.remove();S.boluses.shift();
       if(b.kind==='food'){S.stomach+=60;log('stF','Alimento chegou ao estômago: ácido e enzimas em ação',3)}
-      else{S.stomachWater+=250;log('stW','Água no estômago, sendo absorvida',3)}}}
+      else if(b.kind==='water'){S.stomachWater+=250;log('stW','Água no estômago, sendo absorvida',3)}
+      }}
 }
+function vomit(){S.lastVom=S.clock;let caustic=false;
+  S.subs.forEach(s=>{if(SUB[s.id].via==='oral'){s.gut*=.4;if(SUB[s.id].caustic&&s.gut>.05)caustic=true}});
+  S.stomach*=.3;S.stomachWater*=.3;S.hyd-=3;
+  log(null,'Vômito: o corpo expulsa o conteúdo do estômago');
+  if(caustic){addD('digestivo',8);log(null,'O vômito passou de novo pelo esôfago e queimou mais')}
+  if(S.cons<40){addD('pulmoes',15);log(null,'Inconsciente, o corpo aspirou o vômito para os pulmões')}
+  for(let i=0;i<4;i++)S.vom.push({t:-i*.12,dot:el('circle',{r:3.5,fill:'#c9b26a'},$('#L-dig'))})}
+function die(t,txt){S.dead={t,txt};S.vfT=t==='Fibrilação ventricular'||t==='Parada cardíaca'?12:3;S.urinating=false;
+  log(null,t);$('#oT').textContent=t;$('#oP').textContent=txt;
+  $('#oS').textContent=S.taken.length?'Substâncias recebidas: '+[...new Set(S.taken)].join(', '):'';
+  $('#over').hidden=false;document.querySelectorAll('.controls button:not(#reset)').forEach(b=>b.disabled=true)}
 
 /* ---------- ações ---------- */
-function setAct(k){S.act=k;document.querySelectorAll('#acts button').forEach(b=>b.classList.toggle('on',b.dataset.act===k));log('act'+k,ACT[k].txt,1)}
-document.querySelectorAll('#acts button').forEach(b=>b.onclick=()=>setAct(b.dataset.act));
+function setAct(k,silent){S.act=k;document.querySelectorAll('#acts button').forEach(b=>b.classList.toggle('on',b.dataset.act===k));if(!silent)log('act'+k,ACT[k].txt,1)}
+document.querySelectorAll('#acts button').forEach(b=>b.onclick=()=>{if(S.cons<45&&(b.dataset.act==='caminhar'||b.dataset.act==='correr')){log('cant','Inconsciente: o corpo não consegue se levantar',5);return}setAct(b.dataset.act)});
 const esoph=$('#esoph'),esLen=esoph.getTotalLength();
-function swallow(kind){const dot=el('circle',{r:kind==='food'?5:4,fill:kind==='food'?'#f2c27a':'#9fdcff',stroke:'#fff','stroke-width':.8},$('#L-dig'));
-  S.boluses.push({kind,t:0,dot});log('sw'+kind,kind==='food'?'Engolindo: bolo alimentar descendo pelo esôfago':'Engolindo água',1)}
+function swallow(kind,sub,col){const dot=el('circle',{r:kind==='food'?5:4,fill:col||(kind==='food'?'#f2c27a':'#9fdcff'),stroke:'#fff','stroke-width':.8},$('#L-dig'));
+  S.boluses.push({kind,t:0,dot,sub});if(kind!=='sub')log('sw'+kind,kind==='food'?'Engolindo: bolo alimentar descendo pelo esôfago':'Engolindo água',1)}
 $('#eat').onclick=()=>swallow('food');
 $('#drink').onclick=()=>swallow('water');
 $('#pee').onclick=()=>{if(S.bladder<20){log('pe0','A bexiga já está vazia',3);return}S.urinating=true;log('pee','Esfíncter relaxou: bexiga contraindo',3)};
-function setHold(v){S.hold=v;S.holdTime=0;const b=$('#hold');b.classList.toggle('on',v);
+function setHold(v){if(v&&(S.cons<45||S.vent))return;S.hold=v;S.holdTime=0;const b=$('#hold');b.classList.toggle('on',v);
   b.firstChild.textContent=v?'Soltar a respiração ':'Prender a respiração ';if(v)log('h0','Respiração presa: a troca de gases parou',1)}
 $('#hold').onclick=()=>setHold(!S.hold);
 $('#env').oninput=e=>{S.env=+e.target.value;$('#envv').textContent=S.env+' °C'};
 $('#speed').onchange=e=>speed=+e.target.value;
-$('#reset').onclick=()=>{S.boluses.forEach(b=>b.dot.remove());Object.assign(S,init());$('#env').value=24;$('#envv').textContent='24 °C';setAct('repouso');setHold(false);$('#log').innerHTML='';log('rs','Simulação reiniciada',1)};
+function reset(){S.boluses.forEach(b=>b.dot.remove());S.vom.forEach(v=>v.dot.remove());Object.assign(S,init());
+  $('#env').value=24;$('#envv').textContent='24 °C';setAct('repouso',1);setHold(false);$('#log').innerHTML='';$('#active').innerHTML='';subEls.clear();
+  $('#over').hidden=true;document.querySelectorAll('.controls button').forEach(b=>b.disabled=false);log(null,'Simulação reiniciada')}
+$('#reset').onclick=reset;$('#oR').onclick=reset;
+
+/* escolha de substância */
+let selSub='agua',dose=1;
+(function(){const sel=$('#subSel');const cats={};SUBS.forEach(s=>{(cats[s.cat]=cats[s.cat]||[]).push(s)});
+  for(const c in cats){const g=document.createElement('optgroup');g.label=c;cats[c].forEach(s=>{const o=document.createElement('option');o.value=s.id;o.textContent=s.n;g.appendChild(o)});sel.appendChild(g)}
+  sel.onchange=()=>{selSub=sel.value;renderSub()}})();
+function renderSub(){const d=SUB[selSub];$('#subDesc').innerHTML='';const p=$('#subDesc');
+  const b=document.createElement('b');b.textContent=VIA[d.via][0].toUpperCase()+VIA[d.via].slice(1)+'. ';p.append(b,d.d);
+  const t=document.createElement('span');t.className='tr';t.textContent='Tratamento: '+d.tr.n;p.append(t);
+  $('#subGo').textContent=VERB[d.via]+' · dose '+DOSES[dose][1]}
+document.querySelectorAll('#doses button').forEach(b=>b.onclick=()=>{dose=+b.dataset.d;document.querySelectorAll('#doses button').forEach(x=>x.classList.toggle('on',x===b));renderSub()});
+$('#subGo').onclick=()=>{if(S.dead)return;const d=SUB[selSub],q=DOSES[dose][0];
+  const s={id:d.id,uid:++S.uid,gut:q,blood:0,t:0,said:[],m:0,dl:DOSES[dose][1]};S.taken.push(d.n);
+  log(null,`${VERB[d.via]}: ${d.n} (dose ${DOSES[dose][1]})`);
+  if(d.via==='oral'){if(d.caustic){addD('digestivo',15*q);log(null,'A soda queimou o esôfago na descida')}S.subs.push(s);swallow('sub',s,d.col)}
+  else{S.subs.push(s);if(d.via==='inalado'){S.inhT=4;S.inhCol=d.col}else{S.injT=2.5;const inj=$('#inj');inj.setAttribute('stroke',d.col);
+    if(d.via==='picada'){inj.setAttribute('cx',240);inj.setAttribute('cy',770)}else{inj.setAttribute('cx',318);inj.setAttribute('cy',450)}}}};
+renderSub();
 
 /* camadas */
 [['L-circ','Circulatório','#ff4d5e'],['L-resp','Respiratório','#f29aa6'],['L-nerv','Nervoso','#ffd36b'],['L-dig','Digestório','#e7a07a'],
- ['L-uri','Urinário','#f2d457'],['L-endo','Endócrino','#c77dd8'],['L-musc','Muscular','#d6455a']].forEach(([id,n,c])=>{
+ ['L-uri','Urinário','#f2d457'],['L-endo','Endócrino','#c77dd8'],['L-musc','Muscular','#d6455a'],['L-dmg','Lesões','#ff2a2a']].forEach(([id,n,c])=>{
   const l=document.createElement('label');l.innerHTML=`<input type="checkbox" id="chk-${id}" checked><span class="sw" style="background:${c}"></span>${n}`;
   l.firstChild.onchange=e=>{$('#'+id).style.display=e.target.checked?'':'none'};$('#layers').appendChild(l)});
 
-/* ---------- sinais vitais ---------- */
+/* ---------- painéis ---------- */
 const st=(v,ok,warn)=>v>=ok[0]&&v<=ok[1]?'':(v>=warn[0]&&v<=warn[1]?'warn':'crit');
+const dz=f=>()=>S.dead?0:f();
 const VIT=[
-  {n:'Frequência cardíaca',u:'bpm',v:()=>Math.round(S.hr),s:v=>st(v,[50,100],[40,170])},
-  {n:'Frequência respiratória',u:'irpm',v:()=>S.hold?0:Math.round(S.rr),s:v=>S.hold?'warn':st(v,[10,22],[6,40])},
-  {n:'Pressão arterial',u:'mmHg',v:()=>Math.round(S.sys)+'/'+Math.round(S.dia),s:()=>st(S.sys,[95,135],[85,165])},
-  {n:'Saturação O₂',u:'%',v:()=>Math.round(S.spo2),s:v=>st(v,[95,100],[90,100])},
+  {n:'Frequência cardíaca',u:'bpm',v:dz(()=>Math.round(S.hr)),s:v=>st(v,[50,100],[40,170])},
+  {n:'Frequência respiratória',u:'irpm',v:dz(()=>S.hold?0:Math.round(S.rr)),s:v=>S.hold&&!S.dead?'warn':st(v,[10,22],[6,40])},
+  {n:'Pressão arterial',u:'mmHg',v:()=>S.dead?'0/0':Math.round(S.sys)+'/'+Math.round(S.dia),s:()=>S.dead?'crit':st(S.sys,[95,135],[80,165])},
+  {n:'SpO₂ (oxímetro)',u:'%',v:()=>S.dead?'–':Math.round(S.spo2),s:v=>S.dead?'crit':st(v,[95,100],[90,100])},
+  {n:'Carboxi-hemoglobina',u:'%',v:()=>Math.round(S.cohb),s:v=>st(v,[0,5],[0,20])},
   {n:'CO₂ arterial',u:'mmHg',v:()=>Math.round(S.co2),s:v=>st(v,[35,45],[30,55])},
+  {n:'pH do sangue',u:'',v:()=>S.ph.toFixed(2),s:v=>st(+v,[7.35,7.45],[7.2,7.55])},
   {n:'Temperatura',u:'°C',v:()=>S.temp.toFixed(1),s:v=>st(+v,[36,37.5],[35.5,38.5])},
-  {n:'Glicemia',u:'mg/dL',v:()=>Math.round(S.glu),s:v=>st(v,[70,140],[60,180])},
-  {n:'Hidratação',u:'%',v:()=>Math.round(S.hyd),s:v=>st(v,[70,100],[50,100])},
+  {n:'Glicemia',u:'mg/dL',v:()=>Math.round(S.glu),s:v=>st(v,[70,140],[55,180])},
+  {n:'Sódio',u:'mEq/L',v:()=>Math.round(S.na),s:v=>st(v,[135,145],[125,155])},
+  {n:'Hidratação',u:'%',v:()=>Math.round(S.hyd),s:v=>st(v,[70,100],[45,100])},
   {n:'Bexiga',u:'mL',v:()=>Math.round(S.bladder),s:v=>st(v,[0,300],[0,450])},
+  {n:'Consciência (Glasgow)',u:'/15',v:()=>S.dead?3:Math.round(3+12*S.cons/100),s:v=>st(v,[14,15],[9,15])},
   {n:'Glicogênio',u:'%',v:()=>Math.round(S.energy),s:v=>st(v,[40,100],[20,100])}];
 const vEls=VIT.map(x=>{const d=document.createElement('div');d.className='v';d.innerHTML=`<i></i><div class="n">${x.n}</div><div class="val">–<span>${x.u}</span></div>`;$('#vitals').appendChild(d);return d});
+const orgEls={};ORG.forEach(([k,n])=>{const d=document.createElement('div');d.className='org';d.innerHTML=`<span>${n}</span><span class="mono">0%</span><div class="bar"><b></b></div>`;$('#organs').appendChild(d);orgEls[k]=d});
+const subEls=new Map();
+function renderSubs(){const L=$('#active');const live=new Set();
+  for(const s of S.subs){live.add(s.uid);const d=SUB[s.id];let li=subEls.get(s.uid);
+    if(!li){li=document.createElement('li');li.innerHTML=`<span class="nm"><span class="sw"></span><span></span></span><button></button><div class="st"></div><div class="bar"><b></b></div>`;
+      li.querySelector('.sw').style.background=d.col;li.querySelector('.nm span:last-child').textContent=d.n+' ('+s.dl+')';
+      li.querySelector('.bar b').style.background=d.col;const btn=li.querySelector('button');btn.textContent='Tratar';
+      btn.onclick=()=>treat(s,btn);L.prepend(li);subEls.set(s.uid,li)}
+    const where=d.via==='inalado'?'nos pulmões':d.via==='oral'?'no estômago e intestino':'no local da aplicação';
+    let txt=s.gut>s.blood&&s.gut>.02?`Sendo absorvida ${where}`:s.blood>.03?'Circulando no sangue':s.m>.01?'Metabólito tóxico agindo':'Sendo eliminada';
+    if(s.treated)txt+=' · em tratamento';
+    li.querySelector('.st').textContent=`${txt} · há ${fmtDur(s.t)}`;
+    li.querySelector('.bar b').style.width=clamp(Math.max(s.blood,s.m*.8)/2.5*100,1,100)+'%'}
+  for(const [k,li] of subEls)if(!live.has(k)){li.remove();subEls.delete(k)}
+  $('#noSubs').hidden=S.subs.length>0||S.boluses.some(b=>b.kind==='sub')}
+function fmtDur(m){return m<60?Math.round(m)+' min':m<2880?(m/60).toFixed(1).replace('.',',')+' h':(m/1440).toFixed(1).replace('.',',')+' dias'}
+function treat(s,btn){if(s.treated||S.dead)return;const d=SUB[s.id],k=d.tr.k;
+  if(k.includes('block'))s.blk=1;if(k.includes('clear'))s.clr=d.tr.x||5;if(k.includes('gut'))s.gut*=.1;
+  if(k.includes('support')){S.vent=true;log(null,'Intubado: ventilação mecânica assumiu a respiração')}
+  if(d.tr.glu)S.glu+=d.tr.glu;if(d.tr.hyd)S.hyd=Math.min(100,S.hyd+d.tr.hyd);
+  s.treated=1;btn.disabled=true;btn.textContent='Tratado';log(null,'Tratamento: '+d.tr.n)}
 function renderVitals(){VIT.forEach((x,i)=>{const v=x.v();vEls[i].className='v '+x.s(v);vEls[i].querySelector('.val').firstChild.textContent=v});
-  $('#clock').textContent=fmtClock(S.clock);$('#ecgHr').textContent=Math.round(S.hr)+' bpm';renderInfo()}
+  ORG.forEach(([k])=>{const v=S.dmg[k],e=orgEls[k];e.children[1].textContent=Math.round(v)+'%';const b=e.querySelector('b');b.style.width=v+'%';b.style.background=v>60?'var(--crit)':v>25?'var(--warn)':'var(--ok)'});
+  $('#clock').textContent=fmtClock(S.clock);$('#ecgHr').textContent=(S.dead?0:Math.round(S.hr))+' bpm';$('#ecgHr').style.color=S.dead||S.arr>.5?'var(--crit)':'var(--ok)';
+  renderSubs();renderInfo()}
 
 /* ---------- informações dos órgãos ---------- */
 const met=()=>ACT[S.act].met;
+const DMGKEY={cerebro:'cerebro',medula:'nervos',nervos:'nervos',coracao:'coracao',arterias:'sangue',veias:'sangue',pulmoes:'pulmoes',traqueia:'pulmoes',
+  esofago:'digestivo',estomago:'digestivo',intdel:'digestivo',intgro:'digestivo',figado:'figado',rins:'rins'};
 const INFO={
-  cerebro:['Nervoso','Cérebro','Centro de comando: interpreta os sentidos, controla os movimentos voluntários e, pelo hipotálamo, regula temperatura, fome, sede e sono.',()=>`Atividade ${Math.round(S.brain*100)}% · ondas ${S.act==='dormir'?'delta (sono profundo)':S.act==='repouso'?'alfa (relaxado)':'beta (alerta)'}`],
-  medula:['Nervoso','Medula espinhal e tronco cerebral','Conduz os sinais entre o cérebro e o corpo. O tronco cerebral comanda respiração e batimentos de forma automática, medindo o CO₂ do sangue.',()=>`PaCO₂ ${Math.round(S.co2)} mmHg · impulso para respirar ${S.co2>46?'forte':'normal'}`],
-  nervos:['Nervoso','Nervos periféricos','Levam ordens aos músculos e trazem tato, dor e temperatura. O nervo vago desacelera o coração e estimula a digestão.',()=>`Recrutamento motor ${S.act==='correr'?'alto':S.act==='caminhar'?'moderado':'baixo'} · vago ${S.intestine>1?'estimulando o intestino':'em tônus basal'}`],
-  coracao:['Circulatório','Coração','Bomba de quatro câmaras. O lado direito manda sangue pobre em oxigênio aos pulmões; o esquerdo manda sangue oxigenado ao corpo inteiro.',()=>{const sv=65+Math.min(35,Math.max(0,(S.hr-70)*.35));return`FC ${Math.round(S.hr)} bpm · volume sistólico ${Math.round(sv)} mL · débito ${(S.hr*sv/1000).toFixed(1)} L/min`}],
-  arterias:['Circulatório','Artérias','Levam sangue rico em oxigênio aos tecidos, sob pressão. O pulso que você sente no punho é a onda de cada batimento.',()=>`PA ${Math.round(S.sys)}/${Math.round(S.dia)} mmHg · SpO₂ ${Math.round(S.spo2)}%`],
-  veias:['Circulatório','Veias','Trazem o sangue de volta ao coração. Válvulas internas e a contração dos músculos das pernas ajudam esse retorno.',()=>`Retorno venoso ${S.act==='correr'||S.act==='caminhar'?'impulsionado pela bomba muscular':'passivo, em repouso'}`],
-  pulmoes:['Respiratório','Pulmões','Cerca de 480 milhões de alvéolos trocam gases: o oxigênio entra no sangue e o CO₂ sai para ser expirado.',()=>S.hold?`Troca de gases parada há ${Math.round(S.holdTime)} s · SpO₂ ${Math.round(S.spo2)}%`:`FR ${Math.round(S.rr)} irpm · ventilação ${(S.rr*(.5+(met()-1)*.15)).toFixed(1)} L/min · SpO₂ ${Math.round(S.spo2)}%`],
-  traqueia:['Respiratório','Traqueia e brônquios','Tubo reforçado por anéis de cartilagem que leva o ar aos pulmões. Muco e cílios prendem a poeira.',()=>S.hold?'Fluxo de ar interrompido':`Fluxo de ar: ${S.airDir>0?'inspirando':'expirando'}`],
-  diafragma:['Respiratório','Diafragma','Principal músculo da respiração. Ao contrair, desce e puxa ar para dentro dos pulmões.',()=>S.hold?'Contraído e parado':`${Math.round(S.rr)} contrações por minuto`],
-  esofago:['Digestório','Esôfago','Tubo muscular de uns 25 cm. Ondas de contração (peristaltismo) levam o alimento ao estômago em poucos segundos.',()=>S.boluses.length?'Transportando um bolo para o estômago':'Vazio, em repouso'],
-  estomago:['Digestório','Estômago','Mistura o alimento com ácido clorídrico e enzimas, formando o quimo, que passa aos poucos para o intestino.',()=>`Conteúdo: ${Math.round(S.stomach)} g de alimento · ${Math.round(S.stomachWater)} mL de líquido`],
-  figado:['Digestório','Fígado','Guarda glicose em forma de glicogênio e a libera quando o açúcar no sangue cai. Também produz bile e neutraliza toxinas.',()=>`Liberando ${S.liver.toFixed(2)} mg/dL por min · glicogênio ${Math.round(S.energy)}%`],
-  intdel:['Digestório','Intestino delgado','Com cerca de 6 m, é onde quase todos os nutrientes são absorvidos pelas vilosidades.',()=>S.intestine>.5?`${Math.round(S.intestine)} g de quimo em absorção`:'Sem alimento para absorver'],
-  intgro:['Digestório','Intestino grosso','Reabsorve água e sais e abriga trilhões de bactérias que produzem vitaminas K e B.',()=>`Reabsorção de água ${S.hyd<60?'reforçada (corpo desidratado)':'normal'}`],
-  rins:['Urinário','Rins','Filtram uns 180 L de sangue por dia e ajustam água, sais e pH. Com pouca água no corpo, o hormônio ADH deixa a urina concentrada.',()=>`Urina: ${S.urine.toFixed(1)} mL/min · ${S.hyd<60?'concentrada':'diluída'}`],
-  bexiga:['Urinário','Bexiga','Armazena a urina. Perto de 300 mL surge a vontade de urinar; a capacidade chega a uns 500 mL.',()=>S.urinating?'Esvaziando…':`${Math.round(S.bladder)} mL de ~500 mL`],
+  cerebro:['Nervoso','Cérebro','Centro de comando: interpreta os sentidos, controla os movimentos e, pelo hipotálamo, regula temperatura, fome, sede e sono.',()=>`Atividade ${Math.round(S.brain*100)}% · Glasgow ${Math.round(3+12*S.cons/100)} · O₂ útil ${Math.round(S.realO2*(1-S.cell))}%`],
+  medula:['Nervoso','Medula espinhal e tronco cerebral','Conduz os sinais entre o cérebro e o corpo. O tronco cerebral comanda respiração e batimentos, medindo o CO₂ do sangue.',()=>`PaCO₂ ${Math.round(S.co2)} mmHg · impulso para respirar ${S.co2>46?'forte':'normal'}`],
+  nervos:['Nervoso','Nervos periféricos','Levam ordens aos músculos e trazem tato, dor e temperatura. O nervo vago desacelera o coração e estimula a digestão.',()=>`Bloqueio neuromuscular ${Math.round(S.para*100)}%`],
+  coracao:['Circulatório','Coração','Bomba de quatro câmaras. O lado direito manda sangue aos pulmões; o esquerdo, ao corpo inteiro.',()=>{const sv=65+Math.min(35,pos((S.hr-70)*.35));return`FC ${Math.round(S.hr)} bpm · débito ${(S.hr*sv/1000).toFixed(1)} L/min · instabilidade elétrica ${Math.round(S.arr*100)}%`}],
+  arterias:['Circulatório','Artérias','Levam sangue rico em oxigênio aos tecidos, sob pressão. O pulso no punho é a onda de cada batimento.',()=>`PA ${Math.round(S.sys)}/${Math.round(S.dia)} mmHg · coagulação ${S.bleed>.3?'comprometida':'normal'}`],
+  veias:['Circulatório','Veias','Trazem o sangue de volta ao coração. Normalmente azuladas porque as células já usaram o oxigênio.',()=>S.cell>.3?'Sangue venoso vermelho: as células não estão extraindo oxigênio':'Retorno venoso normal'],
+  pulmoes:['Respiratório','Pulmões','Cerca de 480 milhões de alvéolos trocam gases: o oxigênio entra no sangue e o CO₂ sai.',()=>S.vent?`Ventilação mecânica · SpO₂ ${Math.round(S.spo2)}%`:`FR ${Math.round(S.rr)} irpm · força muscular ${Math.round(S.vf*100)}% · SpO₂ ${Math.round(S.spo2)}%`],
+  traqueia:['Respiratório','Traqueia e brônquios','Tubo reforçado por anéis de cartilagem que leva o ar aos pulmões.',()=>S.vent?'Intubado: tubo do ventilador na traqueia':S.hold?'Fluxo de ar interrompido':`Fluxo de ar: ${S.airDir>0?'inspirando':'expirando'}`],
+  diafragma:['Respiratório','Diafragma','Principal músculo da respiração. Ao contrair, desce e puxa ar para dentro.',()=>`${Math.round(S.rr)} contrações por minuto · força ${Math.round(S.vf*100)}%`],
+  esofago:['Digestório','Esôfago','Tubo muscular de uns 25 cm. Ondas de contração levam o alimento ao estômago.',()=>S.boluses.length?'Transportando algo para o estômago':'Vazio'],
+  estomago:['Digestório','Estômago','Mistura o alimento com ácido e enzimas, formando o quimo, que passa aos poucos ao intestino.',()=>`${Math.round(S.stomach)} g de alimento · ${Math.round(S.stomachWater)} mL de líquido · náusea ${Math.round(clamp(S.gi,0,1)*100)}%`],
+  figado:['Digestório','Fígado','Guarda glicose como glicogênio, produz bile e neutraliza a maioria das toxinas.',()=>`Liberando ${S.liver.toFixed(2)} mg/dL/min · glicogênio ${Math.round(S.energy)}%`],
+  intdel:['Digestório','Intestino delgado','Com cerca de 6 m, é onde quase todos os nutrientes (e venenos) são absorvidos.',()=>S.gutSub?`Contém ${SUB[S.gutSub.id].n.toLowerCase()}`:S.intestine>.5?`${Math.round(S.intestine)} g de quimo em absorção`:'Sem conteúdo para absorver'],
+  intgro:['Digestório','Intestino grosso','Reabsorve água e sais e abriga trilhões de bactérias.',()=>S.diar>.2?`Diarreia: perdendo água (${Math.round(S.diar*100)}%)`:'Reabsorção de água normal'],
+  rins:['Urinário','Rins','Filtram uns 180 L de sangue por dia e eliminam a maioria das toxinas. Com pouca água, o ADH concentra a urina.',()=>`Urina ${S.urine.toFixed(1)} mL/min · filtração ${Math.round(100-S.dmg.rins)}%`],
+  bexiga:['Urinário','Bexiga','Armazena a urina. Perto de 300 mL surge a vontade de urinar.',()=>S.urinating?'Esvaziando…':`${Math.round(S.bladder)} mL de ~500 mL${S.bleed>.3?' · urina com sangue':''}`],
   tireoide:['Endócrino','Tireoide','Os hormônios T3 e T4 definem o ritmo do metabolismo e a produção de calor.',()=>`Metabolismo atual: ${met()} MET`],
-  pancreas:['Endócrino','Pâncreas','Produz enzimas digestivas e os hormônios insulina (baixa a glicose) e glucagon (sobe a glicose).',()=>`Insulina ${S.insulin>1?'alta':S.insulin>.2?'moderada':'basal'} · glicemia ${Math.round(S.glu)} mg/dL`],
-  adrenais:['Endócrino','Glândulas adrenais','Liberam adrenalina e cortisol no esforço, no estresse ou na hipoglicemia: aceleram o coração e liberam energia.',()=>`Adrenalina ${Math.round(S.adren*100)}% do máximo`],
-  musculos:['Muscular','Músculos','Transformam energia química em movimento e calor. No exercício intenso consomem até 20 vezes mais oxigênio.',()=>`Gasto ${met()} MET · ${S.shiver?'tremendo para gerar calor':ACT[S.act].txt.toLowerCase()}`],
-  pele:['Tegumentar','Pele','Maior órgão do corpo. Controla a temperatura com o suor e abrindo ou fechando os vasos da superfície.',()=>`Temperatura interna ${S.temp.toFixed(1)} °C · ${S.sweat>.05?'suando':'sem suor'} · ambiente ${S.env} °C`]};
-let sel='coracao',selEl=null;
-function renderInfo(){const i=INFO[sel];$('#iSys').textContent=i[0];$('#iName').textContent=i[1];$('#iTxt').textContent=i[2];$('#iLive').textContent=i[3]()}
+  pancreas:['Endócrino','Pâncreas','Produz enzimas digestivas, insulina (baixa a glicose) e glucagon (sobe a glicose).',()=>`Insulina ${S.insulin>1?'alta':S.insulin>.2?'moderada':'basal'} · glicemia ${Math.round(S.glu)} mg/dL`],
+  adrenais:['Endócrino','Glândulas adrenais','Liberam adrenalina e cortisol no esforço, no estresse, no choque ou na hipoglicemia.',()=>`Adrenalina ${Math.round(S.adren*100)}% do máximo`],
+  musculos:['Muscular','Músculos','Transformam energia química em movimento e calor.',()=>S.seiz>.35?'Contrações involuntárias (convulsão)':S.para>.3?`Paralisia ${Math.round(S.para*100)}%`:`Gasto ${met()} MET`],
+  pele:['Tegumentar','Pele','Maior órgão do corpo. A cor dela denuncia muita coisa: amarela no fígado doente, roxa sem oxigênio, rosada com CO.',()=>`Temperatura ${S.temp.toFixed(1)} °C · ${S.sweat>.05?'suando':'sem suor'} · cor: ${skinTxt}`]};
+let sel='coracao',selEl=null,skinTxt='normal';
+function renderInfo(){const i=INFO[sel];$('#iSys').textContent=i[0];$('#iName').textContent=i[1];$('#iTxt').textContent=i[2];
+  const k=DMGKEY[sel];$('#iLive').textContent=(S.dead?'Sem atividade · ':'')+i[3]()+(k&&S.dmg[k]>1?` · lesão ${Math.round(S.dmg[k])}%`:'')}
 $('#body').addEventListener('click',e=>{const t=e.target.closest('[data-organ]');if(!t)return;sel=t.dataset.organ;
   if(selEl)selEl.classList.remove('sel');selEl=t;t.classList.add('sel');renderInfo();
   if(innerWidth<=720)$('#info').scrollIntoView({behavior:'smooth',block:'nearest'})});
 
 /* ---------- ECG ---------- */
-const cv=$('#ecg'),cx=cv.getContext('2d');let W=0,H=0,ex=0,ey=null,ph=0;const dpr=Math.min(2,devicePixelRatio||1);
+const cv=$('#ecg'),cx=cv.getContext('2d');let W=0,H=0,ex=0,ey=null,ph=0,et=0;const dpr=Math.min(2,devicePixelRatio||1);
 function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);ex=0;ey=null}
 new ResizeObserver(size).observe(cv);
 const g=(x,m,w)=>Math.exp(-((x-m)**2)/(2*w*w));
-const ecgV=p=>.12*g(p,.1,.025)-.12*g(p,.22,.008)+1*g(p,.25,.01)-.28*g(p,.28,.01)+.3*g(p,.45,.045);
-function beatPulse(p){return p>.22&&p<.42?Math.sin((p-.22)/.2*Math.PI):0}
+const ecgV=(p,w)=>.12*g(p,.1,.025)-.12*g(p,.22,.008*w)+1*g(p,.25,.01*w)-.28*g(p,.28,.01*w)+.3*g(p,.45,.045);
+const beatPulse=p=>p>.22&&p<.42?Math.sin((p-.22)/.2*Math.PI):0;
 
 /* ---------- desenho ---------- */
 const heart=$('#heart'),lungs=$('#lungs'),diaph=$('#diaph'),lungEls=[...document.querySelectorAll('.lung')];
-const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches?.5:1;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches?.4:1;
 function draw(dt){
-  // ECG + batimento (subpassos para não perder o QRS)
-  const N=8,pxs=110;cx.lineWidth=1.6;cx.strokeStyle='#6fd39a';cx.lineJoin='round';
-  for(let k=0;k<N;k++){ph+=dt/N*S.hr/60;if(ph>=1)ph-=1;
-    const x=ex+pxs*dt/N,y=H*.62-ecgV(ph)*H*.5;
+  const N=8,pxs=110,w=1+S.arr*1.5;cx.lineWidth=1.6;cx.strokeStyle=S.dead?'#ff6b5e':'#6fd39a';cx.lineJoin='round';
+  if(S.dead)S.vfT-=dt;
+  for(let k=0;k<N;k++){et+=dt/N;let v;
+    if(S.dead)v=S.vfT>0?(.3*Math.sin(et*38)+.2*Math.sin(et*23+1)+.1*Math.sin(et*61))*Math.min(1,S.vfT/4):(Math.random()-.5)*.02;
+    else{ph+=dt/N*S.hr/60;if(ph>=1)ph-=1;if(S.arr>.2&&Math.random()<S.arr*dt/N*1.5&&ph>.5)ph=.18;v=ecgV(ph,w)}
+    const x=ex+pxs*dt/N,y=H*.62-v*H*.5;
     if(x>W){ex=0;ey=null;continue}
     cx.clearRect(x,0,14,H);if(ey!==null){cx.beginPath();cx.moveTo(ex,ey);cx.lineTo(x,y);cx.stroke()}ex=x;ey=y}
-  const c=beatPulse(ph);pulseRef.v=c;
-  heart.setAttribute('transform',`translate(211 262) rotate(-28) scale(${1-.13*c*reduce})`);
-  $('#heartHalo').setAttribute('opacity',(.15+.5*c).toFixed(2));
+  const c=S.dead?0:beatPulse(ph);pulseRef.v=c;
+  const quiver=S.dead&&S.vfT>0?(Math.random()-.5)*.04:0;
+  heart.setAttribute('transform',`translate(211 262) rotate(-28) scale(${1-.13*c*reduce+quiver})`);
+  $('#heartHalo').setAttribute('opacity',S.dead?0:(.15+.5*c).toFixed(2));
   // respiração
-  if(!S.hold){const prev=S.brPh;S.brPh=(S.brPh+dt*S.rr/60)%1;S.airDir=Math.sin(2*Math.PI*S.brPh)>=0?1:-1}
-  const br=S.hold?1:(1-Math.cos(2*Math.PI*S.brPh))/2;
-  const sc=1+.07*br*reduce;lungs.setAttribute('transform',`translate(200 210) scale(${sc} ${1+.09*br*reduce}) translate(-200 -210)`);
+  if(!S.hold&&!S.dead){S.brPh=(S.brPh+dt*S.rr/60)%1;S.airDir=Math.sin(2*Math.PI*S.brPh)>=0?1:-1}
+  const amp=S.dead?0:S.vent?1:Math.max(.08,S.vf);
+  const br=S.hold?1:(1-Math.cos(2*Math.PI*S.brPh))/2*amp;
+  lungs.setAttribute('transform',`translate(200 210) scale(${1+.07*br*reduce} ${1+.09*br*reduce}) translate(-200 -210)`);
   diaph.setAttribute('transform',`translate(0 ${(9*br*reduce).toFixed(1)})`);
-  const lc=mixHex('#f29aa6','#8b7bd8',(97-S.spo2)/15);lungEls.forEach(l=>l.setAttribute('fill',lc));
-  $('#airflow').style.opacity=S.hold?0:.8;
+  const lc=mixHex(mixHex('#f29aa6','#8b7bd8',(97-S.spo2)/15),'#5a3a3a',S.dmg.pulmoes/120);lungEls.forEach(l=>l.setAttribute('fill',lc));
+  if(S.inhT>0)S.inhT-=dt;
+  const air=$('#airflow');air.style.opacity=S.hold||S.dead?0:.85;air.setAttribute('stroke',S.inhT>0?S.inhCol:'#e8fbff');air.setAttribute('stroke-width',S.inhT>0?3.5:2);
   // fluxos
-  for(const f of flows){f.off-=f.speed()*dt;f.el.style.strokeDashoffset=f.off}
+  if(!S.dead)for(const f of flows){f.off-=f.speed()*dt;f.el.style.strokeDashoffset=f.off}
   $('#urethra').setAttribute('opacity',S.urinating?1:0);
+  // cor do sangue
+  let top=null;for(const s of S.subs)if(s.blood>.05&&(!top||s.blood>top.blood))top=s;
+  const ac=top?mixHex('#ff4d5e',SUB[top.id].col,Math.min(.6,top.blood*.4)):'#ff4d5e';
+  const ac2=mixHex(ac,'#ff7fae',S.cohb/50);
+  artEls.forEach(e=>e.setAttribute('stroke',S.dead?'#6b3940':ac2));
+  const vc=mixHex(mixHex('#4c8dff','#ff4d5e',S.cell*.9),'#ff7fae',S.cohb/60);
+  venEls.forEach(e=>e.setAttribute('stroke',S.dead?'#2f3d5c':vc));
+  smIntFlow.setAttribute('stroke',S.gutSub?SUB[S.gutSub.id].col:'#c97a5e');smIntFlow.setAttribute('stroke-width',S.gutSub?3:2);
   // órgãos
-  const sl=clamp((S.stomach+S.stomachWater/5)/80,0,1);$('#stomFill').setAttribute('y',384-sl*68);$('#stomFill').setAttribute('height',sl*68);
-  const bl=clamp(S.bladder/500,0,1);$('#bladFill').setAttribute('y',510-bl*24);$('#bladFill').setAttribute('height',bl*24);
+  const sl=clamp((S.stomach+S.stomachWater/5)/80+(S.gutSub?.25:0),0,1);$('#stomFill').setAttribute('y',384-sl*68);$('#stomFill').setAttribute('height',sl*68);
+  $('#stomFill').setAttribute('fill',S.gutSub&&S.stomach<5?SUB[S.gutSub.id].col:'#f2c27a');
+  const bl=clamp(S.bladder/500,0,1),bf=$('#bladFill');bf.setAttribute('y',510-bl*24);bf.setAttribute('height',bl*24);
+  bf.setAttribute('fill',S.bleed>.3?'#d23a3a':S.hyd<60?'#d9952a':S.urine>2.5?'#f6efb0':'#f2d457');
   $('#pancHalo').setAttribute('opacity',clamp(S.insulin/1.2,0,.9).toFixed(2));
   $('#liverHalo').setAttribute('opacity',clamp(S.liver/1.5,0,.7).toFixed(2));
   const ad=clamp(S.adren,0,1).toFixed(2);$('#adrHalo1').setAttribute('opacity',ad);$('#adrHalo2').setAttribute('opacity',ad);
-  $('#brainHalo').setAttribute('opacity',(S.brain*.45*(.85+.15*Math.sin(performance.now()/180))).toFixed(2));
-  const mo=clamp(.12+(met()-1)*.06+(S.shiver?.25:0),0,.7);const jit=S.shiver?(Math.random()-.5)*1.2:0;
+  const now=performance.now();
+  $('#brainHalo').setAttribute('opacity',S.dead?0:(S.seiz>.35?.4+.5*Math.random():S.brain*.45*(.85+.15*Math.sin(now/180))).toFixed(2));
+  const mo=clamp(.12+(met()-1)*.06+(S.shiver?.25:0)+S.seiz*.4-S.para*.1,.03,.8);
+  const jit=S.shiver?(Math.random()-.5)*1.2:0;
   muscles.forEach(m=>{m.setAttribute('fill-opacity',mo.toFixed(2));m.setAttribute('transform',`translate(${jit} 0)`)});
-  // pele: cor pela temperatura, suor
-  const t=S.temp,skc=t>=36.8?mixHex('#8fd8e8','#ff8a5c',(t-36.8)/1.6):mixHex('#8fd8e8','#7aa8ff',(36.8-t)/1);
-  $('#skin').setAttribute('stroke',skc);$('#head').setAttribute('stroke',skc);
-  $('#sweat').setAttribute('opacity',S.sweat>.05?(.4+.4*Math.abs(Math.sin(performance.now()/600))).toFixed(2):0);
-  // bolo alimentar
+  // lesões
+  const pulse=.8+.2*Math.sin(now/400);
+  for(const k in dmgEls)dmgEls[k].forEach(e=>e.setAttribute('opacity',(clamp(S.dmg[k]/100,0,1)*.85*pulse).toFixed(2)));
+  // convulsão
+  const sh=S.seiz>.35&&!S.dead?2.5*S.seiz:0;$('#whole').setAttribute('transform',sh?`translate(${((Math.random()-.5)*sh).toFixed(1)} ${((Math.random()-.5)*sh).toFixed(1)})`:'');
+  // pele
+  const t=S.temp;let sk=t>=36.8?mixHex('#8fd8e8','#ff8a5c',(t-36.8)/1.6):mixHex('#8fd8e8','#7aa8ff',(36.8-t));skinTxt='normal';
+  if(S.flush>.2){sk=mixHex(sk,'#ff9aa0',S.flush*.5);skinTxt='avermelhada (vasodilatação)'}
+  if(S.dmg.figado>45){sk=mixHex(sk,'#e8d34a',(S.dmg.figado-45)/40);skinTxt='amarelada (icterícia)'}
+  if(S.cohb>12){sk=mixHex(sk,'#ff5d8f',S.cohb/40);skinTxt='rosa-cereja (monóxido de carbono)'}
+  if(S.spo2<88&&!S.dead){sk=mixHex(sk,'#6f7dff',(88-S.spo2)/25);skinTxt='arroxeada (cianose)'}
+  if(S.dead){sk='#5b6670';skinTxt='pálida, sem circulação'}
+  $('#skin').setAttribute('stroke',sk);$('#head').setAttribute('stroke',sk);$('#gs1').setAttribute('stop-color',sk);$('#gs2').setAttribute('stop-color',sk);
+  $('#sweat').setAttribute('opacity',S.sweat>.05&&!S.dead?(.4+.4*Math.abs(Math.sin(now/600))).toFixed(2):0);
+  // aplicação
+  const inj=$('#inj');if(S.injT>0){S.injT-=dt;inj.setAttribute('opacity',clamp(S.injT/2.5,0,1).toFixed(2));inj.setAttribute('r',(12+(2.5-S.injT)*6).toFixed(1))}else inj.setAttribute('opacity',0);
+  // bolo e vômito
   if(S.boluses.length){const b=S.boluses[0],p=esoph.getPointAtLength(esLen*clamp(b.t,0,1));b.dot.setAttribute('cx',p.x);b.dot.setAttribute('cy',p.y)}
+  S.vom=S.vom.filter(v=>{v.t+=dt/1.2;if(v.t>=1){v.dot.remove();return false}const p=esoph.getPointAtLength(esLen*clamp(1-v.t,0,1));v.dot.setAttribute('cx',p.x);v.dot.setAttribute('cy',p.y);v.dot.setAttribute('opacity',v.t<0?0:1);return true});
 }
 
 let last=performance.now(),acc=0;
-function loop(now){const dt=Math.min(.1,(now-last)/1000);last=now;step(dt);draw(dt);acc+=dt;if(acc>.25){acc=0;renderVitals()}requestAnimationFrame(loop)}
-size();renderVitals();log('start','Simulação iniciada: corpo em repouso',1);
+function loop(now){const dt=Math.min(.1,(now-last)/1000);last=now;
+  const n=Math.max(1,Math.ceil(dt*speed));for(let i=0;i<n;i++)step(dt/n);
+  draw(dt);acc+=dt;if(acc>.25){acc=0;renderVitals()}requestAnimationFrame(loop)}
+size();renderVitals();log(null,'Simulação iniciada: corpo em repouso');
 selEl=document.querySelector('[data-organ="coracao"]');selEl.classList.add('sel');
 requestAnimationFrame(loop);
 })();
