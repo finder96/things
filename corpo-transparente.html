@@ -1,0 +1,510 @@
+<title>Corpo Transparente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: monitor clínico em três colunas — controles | corpo em vidro | sinais vitais. Visual escuro único, de propósito (imagem médica). */
+:root{
+  --bg:#0a1219; --panel:#101c26; --panel2:#142330; --line:#1f3242;
+  --fg:#dce8ef; --muted:#87a0ae; --glass:#8fd8e8;
+  --ok:#6fd39a; --warn:#f2b84b; --crit:#ff6b5e;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--f-body);font-size:14px;line-height:1.45}
+.app{max-width:1400px;margin:0 auto;padding:16px;display:grid;gap:16px;
+  grid-template-columns:250px minmax(300px,1fr) 330px;grid-template-areas:"top top top" "ctl stage mon"}
+.top{grid-area:top;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 24px;border-bottom:1px solid var(--line);padding-block:4px 14px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,3.4vw,38px);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.top p{margin:4px 0 0;color:var(--muted);max-width:62ch}
+.clock{font-family:var(--f-mono);color:var(--muted);font-size:13px;display:flex;gap:14px;align-items:baseline}
+.clock b{color:var(--fg);font-size:22px;font-weight:500}
+.controls{grid-area:ctl;display:flex;flex-direction:column;gap:18px;min-width:0}
+.stage{grid-area:stage;position:relative;display:flex;flex-direction:column;align-items:center;min-width:0}
+.monitor{grid-area:mon;display:flex;flex-direction:column;gap:14px;min-width:0}
+.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0 0 8px;font-weight:600}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+button{font:inherit;color:var(--fg);background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px 10px;cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+button:hover{border-color:#36536a}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--glass);outline-offset:2px}
+button.on{background:#17394a;border-color:var(--glass);color:#fff}
+button small{display:block;color:var(--muted);font-size:11.5px}
+.acts{display:flex;flex-direction:column;gap:6px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+input[type=range]{width:100%;accent-color:var(--glass)}
+select{font:inherit;background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:7px;width:100%}
+.layers{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}
+.layers label{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px}
+.sw{width:10px;height:10px;border-radius:2px;display:inline-block}
+.mono{font-family:var(--f-mono)}
+svg#body{width:100%;max-width:520px;height:auto;max-height:calc(100vh - 140px);display:block;user-select:none}
+svg#body [data-organ]{cursor:pointer}
+svg#body .sel{filter:url(#selglow)}
+.hint{color:var(--muted);font-size:12.5px;margin-top:6px;text-align:center}
+.vitals{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.v{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0;position:relative}
+.v .n{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px}
+.v .val{font-family:var(--f-mono);font-size:21px;font-variant-numeric:tabular-nums;line-height:1.2}
+.v .val span{font-size:11px;color:var(--muted);margin-left:3px}
+.v i{position:absolute;top:10px;right:9px;width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.v.warn i{background:var(--warn)} .v.crit i{background:var(--crit);box-shadow:0 0 8px var(--crit)}
+.v.warn .val{color:var(--warn)} .v.crit .val{color:var(--crit)}
+.ecgbox{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+canvas#ecg{width:100%;height:84px;display:block;
+  background-image:linear-gradient(rgba(111,211,154,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(111,211,154,.07) 1px,transparent 1px);background-size:12px 12px}
+.info{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px}
+.info h2{font-family:var(--f-display);font-size:20px;margin:0;font-weight:700}
+.info .sys{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--glass)}
+.info p{margin:6px 0 0;color:#c3d3dc}
+.info .live{margin-top:8px;font-family:var(--f-mono);font-size:12.5px;color:var(--fg);background:var(--panel2);border-radius:6px;padding:7px 8px}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:12.5px}
+.log li{display:flex;gap:8px;color:#c3d3dc}
+.log li b{font-family:var(--f-mono);font-weight:400;color:var(--muted);flex:none}
+@media (max-width:1050px){.app{grid-template-columns:1fr 330px;grid-template-areas:"top top" "stage mon" "ctl ctl"}
+  .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}}
+@media (max-width:720px){.app{grid-template-columns:1fr;grid-template-areas:"top" "stage" "ctl" "mon"}
+  svg#body{max-height:none}}
+</style>
+
+<div class="app">
+  <header class="top">
+    <div>
+      <h1>Corpo Transparente</h1>
+      <p>Um corpo humano simulado com os sistemas ligados entre si. Mude a atividade, coma, beba ou prenda a respiração e veja os órgãos reagirem.</p>
+    </div>
+    <div class="clock"><span>hora simulada</span><b id="clock">08:00</b></div>
+  </header>
+
+  <aside class="controls">
+    <section>
+      <h3 class="lbl">Atividade</h3>
+      <div class="seg" id="acts">
+        <button data-act="dormir" id="a-dormir">Dormir</button>
+        <button data-act="repouso" id="a-repouso" class="on">Repouso</button>
+        <button data-act="caminhar" id="a-caminhar">Caminhar</button>
+        <button data-act="correr" id="a-correr">Correr</button>
+      </div>
+    </section>
+    <section>
+      <h3 class="lbl">Ações</h3>
+      <div class="acts">
+        <button id="eat">Comer uma refeição <small>60 g de carboidratos</small></button>
+        <button id="drink">Beber água <small>250 mL</small></button>
+        <button id="pee">Urinar <small>esvaziar a bexiga</small></button>
+        <button id="hold">Prender a respiração <small>até o reflexo forçar o ar</small></button>
+      </div>
+    </section>
+    <section>
+      <h3 class="lbl">Ambiente</h3>
+      <div class="row"><label for="env">Temperatura externa</label><span class="mono" id="envv">24 °C</span></div>
+      <input type="range" id="env" min="0" max="42" value="24">
+      <div class="row" style="margin-top:10px"><label for="speed">Velocidade do metabolismo</label></div>
+      <select id="speed">
+        <option value="1">1 s real = 1 min</option>
+        <option value="5">1 s real = 5 min</option>
+        <option value="15">1 s real = 15 min</option>
+      </select>
+    </section>
+    <section>
+      <h3 class="lbl">Camadas visíveis</h3>
+      <div class="layers" id="layers"></div>
+      <button id="reset" style="margin-top:12px;width:100%;text-align:center">Reiniciar simulação</button>
+    </section>
+  </aside>
+
+  <main class="stage">
+    <svg id="body" viewBox="40 10 320 885" role="img" aria-label="Corpo humano transparente com órgãos animados">
+      <defs>
+        <radialGradient id="glass" cx="50%" cy="35%" r="70%">
+          <stop offset="0" stop-color="#8fd8e8" stop-opacity=".13"/>
+          <stop offset="1" stop-color="#8fd8e8" stop-opacity=".03"/>
+        </radialGradient>
+        <filter id="blur6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+        <filter id="selglow" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#ffffff" flood-opacity=".9"/>
+        </filter>
+        <clipPath id="cpStom"><path id="stomShape" d="M232,318 C252,313 264,330 259,352 C254,374 232,384 214,374 C205,368 211,358 222,358 C236,358 240,345 233,334 Z"/></clipPath>
+        <clipPath id="cpBlad"><ellipse cx="200" cy="498" rx="16" ry="12"/></clipPath>
+      </defs>
+
+      <!-- pele -->
+      <g data-organ="pele">
+        <path id="skin" fill="url(#glass)" stroke="#8fd8e8" stroke-width="1.6" stroke-opacity=".75"/>
+        <ellipse id="head" cx="200" cy="74" rx="44" ry="54" fill="url(#glass)" stroke="#8fd8e8" stroke-width="1.6" stroke-opacity=".75"/>
+      </g>
+      <g id="sweat" opacity="0"></g>
+
+      <g id="L-musc" data-organ="musculos"></g>
+
+      <g id="L-dig">
+        <path data-organ="esofago" id="esoph" d="M200,148 C202,200 206,262 214,300 C218,314 224,322 232,324" fill="none" stroke="#d98a7a" stroke-width="5" stroke-linecap="round" stroke-opacity=".7"/>
+        <ellipse id="liverHalo" cx="188" cy="332" rx="44" ry="24" fill="#ff9a6a" opacity="0" filter="url(#blur6)"/>
+        <path data-organ="figado" d="M148,318 C175,304 222,307 229,322 C227,339 205,351 180,353 C159,353 146,341 148,318Z" fill="#9c4a3a" fill-opacity=".8" stroke="#d07a62" stroke-width="1"/>
+        <g data-organ="estomago">
+          <use href="#stomShape" fill="#e7a07a" fill-opacity=".35" stroke="#f0b090" stroke-width="1.4"/>
+          <rect id="stomFill" x="200" y="384" width="70" height="0" fill="#f2c27a" fill-opacity=".85" clip-path="url(#cpStom)"/>
+        </g>
+        <path data-organ="intgro" id="lgInt" d="M168,472 L166,414 C166,405 172,400 181,400 L221,400 C230,400 235,405 235,414 L235,470 C235,478 223,483 210,481" fill="none" stroke="#c98b6b" stroke-width="9" stroke-linecap="round" stroke-opacity=".75"/>
+        <path data-organ="intdel" id="smInt" d="M219,384 C190,386 180,396 195,405 C215,412 223,420 200,425 C178,430 178,440 200,443 C222,445 222,456 200,459 C182,461 185,471 205,469" fill="none" stroke="#f0b49a" stroke-width="5" stroke-linecap="round" stroke-opacity=".85"/>
+      </g>
+
+      <g id="L-uri">
+        <path data-organ="rins" id="ureters" d="M175,402 C178,440 188,474 194,490 M225,402 C222,440 212,474 206,490" fill="none" stroke="#f2d457" stroke-width="2" stroke-opacity=".7"/>
+        <g data-organ="rins">
+          <path d="M172,372 C162,372 160,384 162,394 C164,404 172,408 178,402 C174,396 174,384 179,378 C178,374 176,372 172,372Z" fill="#b5525c" stroke="#e07a84" stroke-width="1"/>
+          <path d="M228,372 C238,372 240,384 238,394 C236,404 228,408 222,402 C226,396 226,384 221,378 C222,374 224,372 228,372Z" fill="#b5525c" stroke="#e07a84" stroke-width="1"/>
+        </g>
+        <g data-organ="bexiga">
+          <ellipse cx="200" cy="498" rx="16" ry="12" fill="#e8d58a" fill-opacity=".12" stroke="#e8d58a" stroke-width="1.4"/>
+          <rect id="bladFill" x="184" y="510" width="32" height="0" fill="#f2d457" fill-opacity=".8" clip-path="url(#cpBlad)"/>
+          <path id="urethra" d="M200,510 L200,526" stroke="#f2d457" stroke-width="2.5" stroke-dasharray="3 4" opacity="0"/>
+        </g>
+      </g>
+
+      <g id="L-resp">
+        <path data-organ="traqueia" id="trachea" d="M200,138 L200,212 L182,226 M200,212 L218,226" fill="none" stroke="#b9d4de" stroke-width="5" stroke-linecap="round" stroke-opacity=".55"/>
+        <path id="airflow" d="M200,138 L200,212 L182,226 M200,212 L218,226" fill="none" stroke="#e8fbff" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>
+        <g id="lungs" data-organ="pulmoes">
+          <path class="lung" d="M182,206 C162,204 145,230 142,265 C140,296 145,318 160,322 C173,325 183,315 185,300 L185,218 Z" fill="#f29aa6" fill-opacity=".45" stroke="#f7b9c2" stroke-width="1.2"/>
+          <path class="lung" d="M218,206 C238,204 255,230 258,265 C260,296 255,318 240,322 C230,325 224,318 222,302 C229,292 231,280 226,270 L218,218 Z" fill="#f29aa6" fill-opacity=".45" stroke="#f7b9c2" stroke-width="1.2"/>
+        </g>
+        <path data-organ="diafragma" id="diaph" d="M138,324 C168,300 232,300 262,324" fill="none" stroke="#c96a6a" stroke-width="3" stroke-opacity=".8"/>
+      </g>
+
+      <g id="L-circ">
+        <g id="arts" data-organ="arterias"></g>
+        <g id="veins" data-organ="veias"></g>
+        <g data-organ="coracao">
+          <circle id="heartHalo" cx="211" cy="262" r="26" fill="#ff4d5e" opacity="0" filter="url(#blur6)"/>
+          <path id="heart" d="M0,13 C-19,1 -23,-14 -11,-19 C-4,-21 0,-16 0,-12 C0,-16 4,-21 11,-19 C23,-14 19,1 0,13Z" fill="#e0475a" stroke="#ff8d99" stroke-width="1.2" transform="translate(211 262) rotate(-28)"/>
+        </g>
+      </g>
+
+      <g id="L-endo">
+        <g data-organ="tireoide">
+          <ellipse cx="194" cy="152" rx="5" ry="8" fill="#c77dd8" fill-opacity=".8"/><ellipse cx="206" cy="152" rx="5" ry="8" fill="#c77dd8" fill-opacity=".8"/>
+        </g>
+        <g data-organ="pancreas">
+          <ellipse id="pancHalo" cx="216" cy="373" rx="30" ry="10" fill="#ffe38a" opacity="0" filter="url(#blur6)"/>
+          <path d="M188,373 C204,365 232,365 246,371 C240,379 210,381 188,378Z" fill="#e8c46a" fill-opacity=".9" stroke="#ffe0a0" stroke-width=".8"/>
+        </g>
+        <g data-organ="adrenais">
+          <circle id="adrHalo1" cx="172" cy="368" r="10" fill="#ffb347" opacity="0" filter="url(#blur6)"/>
+          <circle id="adrHalo2" cx="228" cy="368" r="10" fill="#ffb347" opacity="0" filter="url(#blur6)"/>
+          <path d="M165,372 L172,362 L179,372Z M221,372 L228,362 L235,372Z" fill="#f0a03c"/>
+        </g>
+      </g>
+
+      <g id="L-nerv">
+        <g id="nerves" data-organ="nervos"></g>
+        <path data-organ="medula" id="cord" d="M200,94 L200,470" stroke="#ffd36b" stroke-width="3.5" stroke-opacity=".55" fill="none"/>
+        <g data-organ="cerebro">
+          <ellipse id="brainHalo" cx="200" cy="66" rx="40" ry="32" fill="#ffd36b" opacity="0" filter="url(#blur6)"/>
+          <ellipse cx="200" cy="66" rx="36" ry="30" fill="#e8a7b5" fill-opacity=".55" stroke="#f5c6d0" stroke-width="1.2"/>
+          <path d="M200,38 L200,94 M176,52 C184,56 180,64 188,66 C194,68 190,78 182,80 M224,52 C216,56 220,64 212,66 C206,68 210,78 218,80 M172,70 C178,72 176,82 168,84 M228,70 C222,72 224,82 232,84 M186,44 C190,50 196,48 196,56 M214,44 C210,50 204,48 204,56" fill="none" stroke="#b9727f" stroke-width="1.2"/>
+          <ellipse cx="214" cy="96" rx="13" ry="7" fill="#d38f9d" fill-opacity=".6"/>
+        </g>
+      </g>
+    </svg>
+    <div class="hint">Toque em qualquer órgão para ver o que ele está fazendo agora.</div>
+  </main>
+
+  <aside class="monitor">
+    <section>
+      <h3 class="lbl">Sinais vitais</h3>
+      <div class="vitals" id="vitals"></div>
+    </section>
+    <section class="ecgbox">
+      <div class="row"><h3 class="lbl" style="margin:0">ECG · derivação II</h3><span class="mono" id="ecgHr" style="color:var(--ok)">72 bpm</span></div>
+      <canvas id="ecg"></canvas>
+    </section>
+    <section class="info" id="info" aria-live="polite">
+      <div class="sys" id="iSys">Circulatório</div>
+      <h2 id="iName">Coração</h2>
+      <p id="iTxt"></p>
+      <div class="live" id="iLive"></div>
+    </section>
+    <section>
+      <h3 class="lbl">O que o corpo está fazendo</h3>
+      <ul class="log" id="log"></ul>
+    </section>
+  </aside>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+const mir=d=>{let i=0;return d.replace(/-?\d+(\.\d+)?/g,n=>(i++%2===0)?String(400-parseFloat(n)):n)};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+function mixHex(a,b,t){t=clamp(t,0,1);const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const A=p(a),B=p(b);return'#'+A.map((v,i)=>Math.round(lerp(v,B[i],t)).toString(16).padStart(2,'0')).join('')}
+
+/* ---------- corpo (contorno) ---------- */
+const R=[[222,128],[224,158],[246,170],[280,180],[298,194],[306,222],[310,270],[316,330],[324,390],[332,450],[340,500],[346,525],[342,548],[330,556],[320,540],[316,512],[306,456],[296,396],[288,336],[280,280],[274,246],[268,262],[264,320],[262,370],[270,420],[282,470],[284,520],[278,600],[270,680],[264,760],[264,830],[276,858],[288,874],[284,884],[244,884],[236,866],[236,830],[232,760],[226,680],[220,600],[212,530],[204,506]];
+const pts=R.concat(R.slice().reverse().map(([x,y])=>[400-x,y]));
+(function(){const n=pts.length,f=v=>v.toFixed(1);let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=0;i<n;i++){const p0=pts[(i-1+n)%n],p1=pts[i],p2=pts[(i+1)%n],p3=pts[(i+2)%n];
+    d+=`C${f(p1[0]+(p2[0]-p0[0])/6)},${f(p1[1]+(p2[1]-p0[1])/6)} ${f(p2[0]-(p3[0]-p1[0])/6)},${f(p2[1]-(p3[1]-p1[1])/6)} ${p2[0]},${p2[1]}`}
+  $('#skin').setAttribute('d',d+'Z')})();
+
+/* suor */
+[[178,40],[222,46],[268,300],[132,300],[268,420],[132,420],[300,250],[100,250]].forEach(([x,y])=>
+  el('path',{d:`M${x},${y} c-3,5 -3,8 0,8 c3,0 3,-3 0,-8z`,fill:'#bfe9ff'},$('#sweat')));
+
+/* músculos */
+const muscG=$('#L-musc');const muscles=[];
+[[250,600,14,50],[250,762,10,36],[296,290,9,32],[317,440,7,30]].forEach(([x,y,rx,ry])=>{
+  [x,400-x].forEach(cx=>muscles.push(el('ellipse',{cx,cy:y,rx,ry,fill:'#d6455a','fill-opacity':.15,stroke:'#f07080','stroke-opacity':.3},muscG)))});
+
+/* vasos e nervos (lado direito do corpo é desenhado e espelhado) */
+const flows=[];
+function flow(g,d,o,speed){const p=el('path',Object.assign({d,fill:'none','stroke-linecap':'round'},o),g);flows.push({el:p,off:0,speed});return p}
+const S={};
+const pulseRef={v:0};
+const artSp=()=>(18+S.hr*.5)*(1+1.8*pulseRef.v);
+const venSp=()=>10+S.hr*.3;
+const artStyle={stroke:'#ff4d5e','stroke-width':2.2,'stroke-dasharray':'5 7','stroke-opacity':.9};
+const venStyle={stroke:'#4c8dff','stroke-width':2.2,'stroke-dasharray':'4 8','stroke-opacity':.85};
+const arts=$('#arts'),veins=$('#veins'),nerv=$('#nerves');
+['M210,250 C214,232 206,222 202,232 L203,452',
+ 'M203,388 L178,388 M203,388 L222,388',
+ 'M168,272 C186,274 200,271 208,263'].forEach(d=>flow(arts,d,artStyle,artSp));
+['M203,452 C212,520 234,600 242,700 C246,780 244,840 248,870',
+ 'M206,230 C208,190 208,150 210,110 C212,90 208,70 204,56',
+ 'M208,232 C240,200 276,198 292,236 C302,290 308,380 318,450 C324,490 330,520 334,540'].forEach(d=>{flow(arts,d,artStyle,artSp);flow(arts,mir(d),artStyle,artSp)});
+flow(veins,'M206,258 C196,250 186,248 170,252 M212,252 C222,246 232,246 240,252',venStyle,venSp);
+['M240,872 C236,840 238,780 234,700 C228,600 206,520 197,452',
+ 'M210,58 C216,80 216,110 214,150 C212,190 210,220 206,250',
+ 'M328,544 C322,520 316,490 310,452 C300,380 294,290 286,244 C272,212 236,214 206,246'].forEach(d=>{flow(veins,d,venStyle,venSp);flow(veins,mir(d),venStyle,venSp)});
+flow(veins,'M197,452 L197,290 C197,278 200,270 206,266',venStyle,venSp);
+
+const nerStyle={stroke:'#ffd36b','stroke-width':1.4,'stroke-dasharray':'2 12','stroke-opacity':.9};
+const nerSp=()=>20+S.brain*140;
+['M200,180 C236,186 280,196 298,246 C308,300 314,400 326,470 C332,505 336,525 338,545',
+ 'M200,470 C214,530 238,610 246,700 C250,780 248,840 258,872'].forEach(d=>{flow(nerv,d,nerStyle,nerSp);flow(nerv,mir(d),nerStyle,nerSp)});
+flow(nerv,'M198,100 C194,160 192,220 206,258 C214,290 224,320 236,340',Object.assign({},nerStyle,{stroke:'#ffe9a8'}),()=>12+S.intestine*0.6);
+flow($('#L-nerv'),'M200,94 L200,470',nerStyle,nerSp);
+
+/* fluxos dos órgãos */
+const air=flows.push({el:$('#airflow'),off:0,speed:()=>S.airDir*(S.hold?0:30+S.rr*2)});
+['#smInt','#lgInt'].forEach((id,i)=>{const p=$(id);const c=p.cloneNode();c.removeAttribute('data-organ');c.removeAttribute('id');
+  c.setAttribute('stroke',i?'#7a4a34':'#c97a5e');c.setAttribute('stroke-width',i?3:2);c.setAttribute('stroke-dasharray','3 9');c.style.pointerEvents='none';
+  p.after(c);flows.push({el:c,off:0,speed:()=>i?3+S.intestine*0.05:(S.intestine>.5?16:1.5)})});
+(function(){const u=$('#ureters');const c=u.cloneNode();c.removeAttribute('data-organ');c.setAttribute('stroke','#fff1a0');c.setAttribute('stroke-dasharray','2 8');c.setAttribute('stroke-width',1.6);c.style.pointerEvents='none';u.after(c);flows.push({el:c,off:0,speed:()=>S.urine*10})})();
+flows.push({el:$('#urethra'),off:0,speed:()=>60});
+
+/* ---------- estado fisiológico ---------- */
+const ACT={dormir:{hr:56,rr:12,met:.9,brain:.25,txt:'Dormindo'},repouso:{hr:72,rr:14,met:1,brain:.6,txt:'Em repouso'},
+  caminhar:{hr:102,rr:20,met:3,brain:.75,txt:'Caminhando'},correr:{hr:150,rr:32,met:8,brain:.9,txt:'Correndo'}};
+function init(){return{act:'repouso',hr:72,rr:14,spo2:98,co2:40,sys:118,dia:76,temp:36.7,glu:92,insulin:0,hyd:85,bladder:120,
+  stomach:0,stomachWater:0,intestine:0,energy:80,env:24,hold:false,holdTime:0,adren:0,clock:8*60,brPh:0,airDir:1,
+  liver:0,urine:1,sweat:0,shiver:false,brain:.6,urinating:false,boluses:[]}}
+Object.assign(S,init());
+let speed=1;
+
+/* ---------- registro de eventos ---------- */
+const cool={};
+function fmtClock(m){m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(Math.floor(m%60)).padStart(2,'0')}
+function log(key,msg,cd=30){const now=performance.now()/1000;if(cool[key]&&now-cool[key]<cd)return;cool[key]=now;
+  const li=document.createElement('li');li.innerHTML=`<b>${fmtClock(S.clock)}</b><span></span>`;li.lastChild.textContent=msg;
+  const L=$('#log');L.prepend(li);while(L.children.length>8)L.lastChild.remove()}
+
+/* ---------- simulação ---------- */
+function step(dt){
+  const a=ACT[S.act];const sm=dt*speed; S.clock+=sm;
+  S.brain=lerp(S.brain,a.brain+(S.hold?0.15:0),Math.min(1,dt));
+  // adrenalina
+  let adT=S.act==='correr'?.8:S.act==='caminhar'?.3:0; if(S.hold&&S.holdTime>20)adT=Math.max(adT,.5); if(S.glu<70)adT=Math.max(adT,.6);
+  S.adren+=(adT-S.adren)*Math.min(1,dt*.5);
+  // respiração
+  if(S.hold){
+    S.holdTime+=dt; S.co2+=dt*.35*Math.sqrt(a.met);
+    if(S.holdTime>8)S.spo2-=dt*(.12+.04*a.met);
+    if(S.holdTime>10)log('hold1','CO₂ subindo: o tronco cerebral está pedindo ar',60);
+    if(S.co2>=58||S.spo2<82){setHold(false);log('reflex','Reflexo respiratório forçou a respiração',5)}
+  }else{
+    const rrT=a.rr+Math.max(0,S.co2-40)*1.4+Math.max(0,94-S.spo2)*.8+Math.max(0,S.temp-37.5)*3;
+    S.rr+=(rrT-S.rr)*Math.min(1,dt*.4);
+    S.co2+=(40+(a.met>3?2:0)-S.co2)*Math.min(1,dt*.3);
+    S.spo2+=((a.met>5?97:98)-S.spo2)*Math.min(1,dt*.25);
+  }
+  // coração
+  let hrT=a.hr+(S.temp-36.8)*12+Math.max(0,70-S.hyd)*.6+Math.max(0,95-S.spo2)*1.5+S.adren*10;
+  if(S.hold&&S.holdTime>15)hrT-=8;
+  S.hr+=(hrT-S.hr)*Math.min(1,dt*.25);
+  const dehy=Math.max(0,65-S.hyd);
+  S.sys+=((112+(S.hr-70)*.35+S.adren*8-dehy*.8)-S.sys)*Math.min(1,dt*.5);
+  S.dia+=((74+(S.hr-70)*.08+S.adren*4-dehy*.4)-S.dia)*Math.min(1,dt*.5);
+  // temperatura
+  S.sweat=S.temp>37.15?(S.temp-37.15)*2+(S.env>30?(S.env-30)*.1:0):0;
+  S.shiver=S.temp<36.3;
+  let tT=36.6+(a.met-1)*.22+(S.env-24)*.035-S.sweat*.15+(S.shiver?.3:0);
+  S.temp+=(tT-S.temp)*Math.min(1,sm*.08);
+  if(S.sweat>.15)log('sweat','Pele suando para perder calor',90);
+  if(S.shiver)log('shiver','Tremores musculares para produzir calor',90);
+  // água
+  S.hyd-=sm*(.02+S.sweat*.05+(a.met-1)*.005);
+  const w=Math.min(S.stomachWater,sm*25);S.stomachWater-=w;S.hyd+=w*.06;S.hyd=clamp(S.hyd,0,100);
+  if(S.hyd<60)log('hyd','Desidratação: o ADH faz os rins concentrarem a urina',120);
+  // rins e bexiga
+  S.urine=.4+1.6*clamp((S.hyd-50)/40,0,1);
+  if(S.urinating){S.bladder-=dt*220;if(S.bladder<=4){S.bladder=4;S.urinating=false;log('pee2','Bexiga esvaziada',3)}}
+  else S.bladder+=S.urine*sm;
+  S.bladder=clamp(S.bladder,0,600);
+  if(S.bladder>450)log('b2','Bexiga quase no limite: urgência para urinar',60);
+  else if(S.bladder>300)log('b1','Bexiga com mais de 300 mL: vontade de urinar',120);
+  // digestão
+  const had=S.stomach>0;
+  const emp=Math.min(S.stomach,sm*2);S.stomach-=emp;S.intestine+=emp;
+  const abs=Math.min(S.intestine,sm*1.6);S.intestine-=abs;S.glu+=abs*1.4;
+  if(had&&S.stomach<=0)log('stE','Estômago vazio: todo o quimo passou ao intestino',5);
+  if(abs>0.05)log('abs','Intestino delgado absorvendo glicose',120);
+  // glicose
+  S.insulin+=((Math.max(0,S.glu-95)*.015)-S.insulin)*Math.min(1,sm*.3);
+  S.glu-=S.insulin*sm*3;
+  S.glu-=sm*((a.met-1)*.25+.15);
+  S.liver=(S.glu<90?.15+(90-S.glu)*.08:0)+S.adren*.8*(S.glu<110?1:0);
+  if(S.energy<=0)S.liver*=.2;
+  S.glu+=S.liver*sm; S.glu=clamp(S.glu,30,400);
+  if(S.insulin>.5)log('ins','Pâncreas liberando insulina para baixar a glicose',90);
+  if(S.liver>.6)log('liv','Fígado transformando glicogênio em glicose',90);
+  if(S.glu<70)log('hypo','Glicemia baixa: adrenalina e glucagon liberados',60);
+  // reservas
+  S.energy+=sm*(-(a.met-1)*.02-S.liver*.08+(S.act==='dormir'?.05:0)+abs*.05);
+  S.energy=clamp(S.energy,0,100);
+  if(S.energy<20)log('en','Reservas de glicogênio baixas: fadiga muscular',120);
+  // bolo alimentar
+  if(S.boluses.length){const b=S.boluses[0];b.t+=dt/2.2;
+    if(b.t>=1){b.dot.remove();S.boluses.shift();
+      if(b.kind==='food'){S.stomach+=60;log('stF','Alimento chegou ao estômago: ácido e enzimas em ação',3)}
+      else{S.stomachWater+=250;log('stW','Água no estômago, sendo absorvida',3)}}}
+}
+
+/* ---------- ações ---------- */
+function setAct(k){S.act=k;document.querySelectorAll('#acts button').forEach(b=>b.classList.toggle('on',b.dataset.act===k));log('act'+k,ACT[k].txt,1)}
+document.querySelectorAll('#acts button').forEach(b=>b.onclick=()=>setAct(b.dataset.act));
+const esoph=$('#esoph'),esLen=esoph.getTotalLength();
+function swallow(kind){const dot=el('circle',{r:kind==='food'?5:4,fill:kind==='food'?'#f2c27a':'#9fdcff',stroke:'#fff','stroke-width':.8},$('#L-dig'));
+  S.boluses.push({kind,t:0,dot});log('sw'+kind,kind==='food'?'Engolindo: bolo alimentar descendo pelo esôfago':'Engolindo água',1)}
+$('#eat').onclick=()=>swallow('food');
+$('#drink').onclick=()=>swallow('water');
+$('#pee').onclick=()=>{if(S.bladder<20){log('pe0','A bexiga já está vazia',3);return}S.urinating=true;log('pee','Esfíncter relaxou: bexiga contraindo',3)};
+function setHold(v){S.hold=v;S.holdTime=0;const b=$('#hold');b.classList.toggle('on',v);
+  b.firstChild.textContent=v?'Soltar a respiração ':'Prender a respiração ';if(v)log('h0','Respiração presa: a troca de gases parou',1)}
+$('#hold').onclick=()=>setHold(!S.hold);
+$('#env').oninput=e=>{S.env=+e.target.value;$('#envv').textContent=S.env+' °C'};
+$('#speed').onchange=e=>speed=+e.target.value;
+$('#reset').onclick=()=>{S.boluses.forEach(b=>b.dot.remove());Object.assign(S,init());$('#env').value=24;$('#envv').textContent='24 °C';setAct('repouso');setHold(false);$('#log').innerHTML='';log('rs','Simulação reiniciada',1)};
+
+/* camadas */
+[['L-circ','Circulatório','#ff4d5e'],['L-resp','Respiratório','#f29aa6'],['L-nerv','Nervoso','#ffd36b'],['L-dig','Digestório','#e7a07a'],
+ ['L-uri','Urinário','#f2d457'],['L-endo','Endócrino','#c77dd8'],['L-musc','Muscular','#d6455a']].forEach(([id,n,c])=>{
+  const l=document.createElement('label');l.innerHTML=`<input type="checkbox" id="chk-${id}" checked><span class="sw" style="background:${c}"></span>${n}`;
+  l.firstChild.onchange=e=>{$('#'+id).style.display=e.target.checked?'':'none'};$('#layers').appendChild(l)});
+
+/* ---------- sinais vitais ---------- */
+const st=(v,ok,warn)=>v>=ok[0]&&v<=ok[1]?'':(v>=warn[0]&&v<=warn[1]?'warn':'crit');
+const VIT=[
+  {n:'Frequência cardíaca',u:'bpm',v:()=>Math.round(S.hr),s:v=>st(v,[50,100],[40,170])},
+  {n:'Frequência respiratória',u:'irpm',v:()=>S.hold?0:Math.round(S.rr),s:v=>S.hold?'warn':st(v,[10,22],[6,40])},
+  {n:'Pressão arterial',u:'mmHg',v:()=>Math.round(S.sys)+'/'+Math.round(S.dia),s:()=>st(S.sys,[95,135],[85,165])},
+  {n:'Saturação O₂',u:'%',v:()=>Math.round(S.spo2),s:v=>st(v,[95,100],[90,100])},
+  {n:'CO₂ arterial',u:'mmHg',v:()=>Math.round(S.co2),s:v=>st(v,[35,45],[30,55])},
+  {n:'Temperatura',u:'°C',v:()=>S.temp.toFixed(1),s:v=>st(+v,[36,37.5],[35.5,38.5])},
+  {n:'Glicemia',u:'mg/dL',v:()=>Math.round(S.glu),s:v=>st(v,[70,140],[60,180])},
+  {n:'Hidratação',u:'%',v:()=>Math.round(S.hyd),s:v=>st(v,[70,100],[50,100])},
+  {n:'Bexiga',u:'mL',v:()=>Math.round(S.bladder),s:v=>st(v,[0,300],[0,450])},
+  {n:'Glicogênio',u:'%',v:()=>Math.round(S.energy),s:v=>st(v,[40,100],[20,100])}];
+const vEls=VIT.map(x=>{const d=document.createElement('div');d.className='v';d.innerHTML=`<i></i><div class="n">${x.n}</div><div class="val">–<span>${x.u}</span></div>`;$('#vitals').appendChild(d);return d});
+function renderVitals(){VIT.forEach((x,i)=>{const v=x.v();vEls[i].className='v '+x.s(v);vEls[i].querySelector('.val').firstChild.textContent=v});
+  $('#clock').textContent=fmtClock(S.clock);$('#ecgHr').textContent=Math.round(S.hr)+' bpm';renderInfo()}
+
+/* ---------- informações dos órgãos ---------- */
+const met=()=>ACT[S.act].met;
+const INFO={
+  cerebro:['Nervoso','Cérebro','Centro de comando: interpreta os sentidos, controla os movimentos voluntários e, pelo hipotálamo, regula temperatura, fome, sede e sono.',()=>`Atividade ${Math.round(S.brain*100)}% · ondas ${S.act==='dormir'?'delta (sono profundo)':S.act==='repouso'?'alfa (relaxado)':'beta (alerta)'}`],
+  medula:['Nervoso','Medula espinhal e tronco cerebral','Conduz os sinais entre o cérebro e o corpo. O tronco cerebral comanda respiração e batimentos de forma automática, medindo o CO₂ do sangue.',()=>`PaCO₂ ${Math.round(S.co2)} mmHg · impulso para respirar ${S.co2>46?'forte':'normal'}`],
+  nervos:['Nervoso','Nervos periféricos','Levam ordens aos músculos e trazem tato, dor e temperatura. O nervo vago desacelera o coração e estimula a digestão.',()=>`Recrutamento motor ${S.act==='correr'?'alto':S.act==='caminhar'?'moderado':'baixo'} · vago ${S.intestine>1?'estimulando o intestino':'em tônus basal'}`],
+  coracao:['Circulatório','Coração','Bomba de quatro câmaras. O lado direito manda sangue pobre em oxigênio aos pulmões; o esquerdo manda sangue oxigenado ao corpo inteiro.',()=>{const sv=65+Math.min(35,Math.max(0,(S.hr-70)*.35));return`FC ${Math.round(S.hr)} bpm · volume sistólico ${Math.round(sv)} mL · débito ${(S.hr*sv/1000).toFixed(1)} L/min`}],
+  arterias:['Circulatório','Artérias','Levam sangue rico em oxigênio aos tecidos, sob pressão. O pulso que você sente no punho é a onda de cada batimento.',()=>`PA ${Math.round(S.sys)}/${Math.round(S.dia)} mmHg · SpO₂ ${Math.round(S.spo2)}%`],
+  veias:['Circulatório','Veias','Trazem o sangue de volta ao coração. Válvulas internas e a contração dos músculos das pernas ajudam esse retorno.',()=>`Retorno venoso ${S.act==='correr'||S.act==='caminhar'?'impulsionado pela bomba muscular':'passivo, em repouso'}`],
+  pulmoes:['Respiratório','Pulmões','Cerca de 480 milhões de alvéolos trocam gases: o oxigênio entra no sangue e o CO₂ sai para ser expirado.',()=>S.hold?`Troca de gases parada há ${Math.round(S.holdTime)} s · SpO₂ ${Math.round(S.spo2)}%`:`FR ${Math.round(S.rr)} irpm · ventilação ${(S.rr*(.5+(met()-1)*.15)).toFixed(1)} L/min · SpO₂ ${Math.round(S.spo2)}%`],
+  traqueia:['Respiratório','Traqueia e brônquios','Tubo reforçado por anéis de cartilagem que leva o ar aos pulmões. Muco e cílios prendem a poeira.',()=>S.hold?'Fluxo de ar interrompido':`Fluxo de ar: ${S.airDir>0?'inspirando':'expirando'}`],
+  diafragma:['Respiratório','Diafragma','Principal músculo da respiração. Ao contrair, desce e puxa ar para dentro dos pulmões.',()=>S.hold?'Contraído e parado':`${Math.round(S.rr)} contrações por minuto`],
+  esofago:['Digestório','Esôfago','Tubo muscular de uns 25 cm. Ondas de contração (peristaltismo) levam o alimento ao estômago em poucos segundos.',()=>S.boluses.length?'Transportando um bolo para o estômago':'Vazio, em repouso'],
+  estomago:['Digestório','Estômago','Mistura o alimento com ácido clorídrico e enzimas, formando o quimo, que passa aos poucos para o intestino.',()=>`Conteúdo: ${Math.round(S.stomach)} g de alimento · ${Math.round(S.stomachWater)} mL de líquido`],
+  figado:['Digestório','Fígado','Guarda glicose em forma de glicogênio e a libera quando o açúcar no sangue cai. Também produz bile e neutraliza toxinas.',()=>`Liberando ${S.liver.toFixed(2)} mg/dL por min · glicogênio ${Math.round(S.energy)}%`],
+  intdel:['Digestório','Intestino delgado','Com cerca de 6 m, é onde quase todos os nutrientes são absorvidos pelas vilosidades.',()=>S.intestine>.5?`${Math.round(S.intestine)} g de quimo em absorção`:'Sem alimento para absorver'],
+  intgro:['Digestório','Intestino grosso','Reabsorve água e sais e abriga trilhões de bactérias que produzem vitaminas K e B.',()=>`Reabsorção de água ${S.hyd<60?'reforçada (corpo desidratado)':'normal'}`],
+  rins:['Urinário','Rins','Filtram uns 180 L de sangue por dia e ajustam água, sais e pH. Com pouca água no corpo, o hormônio ADH deixa a urina concentrada.',()=>`Urina: ${S.urine.toFixed(1)} mL/min · ${S.hyd<60?'concentrada':'diluída'}`],
+  bexiga:['Urinário','Bexiga','Armazena a urina. Perto de 300 mL surge a vontade de urinar; a capacidade chega a uns 500 mL.',()=>S.urinating?'Esvaziando…':`${Math.round(S.bladder)} mL de ~500 mL`],
+  tireoide:['Endócrino','Tireoide','Os hormônios T3 e T4 definem o ritmo do metabolismo e a produção de calor.',()=>`Metabolismo atual: ${met()} MET`],
+  pancreas:['Endócrino','Pâncreas','Produz enzimas digestivas e os hormônios insulina (baixa a glicose) e glucagon (sobe a glicose).',()=>`Insulina ${S.insulin>1?'alta':S.insulin>.2?'moderada':'basal'} · glicemia ${Math.round(S.glu)} mg/dL`],
+  adrenais:['Endócrino','Glândulas adrenais','Liberam adrenalina e cortisol no esforço, no estresse ou na hipoglicemia: aceleram o coração e liberam energia.',()=>`Adrenalina ${Math.round(S.adren*100)}% do máximo`],
+  musculos:['Muscular','Músculos','Transformam energia química em movimento e calor. No exercício intenso consomem até 20 vezes mais oxigênio.',()=>`Gasto ${met()} MET · ${S.shiver?'tremendo para gerar calor':ACT[S.act].txt.toLowerCase()}`],
+  pele:['Tegumentar','Pele','Maior órgão do corpo. Controla a temperatura com o suor e abrindo ou fechando os vasos da superfície.',()=>`Temperatura interna ${S.temp.toFixed(1)} °C · ${S.sweat>.05?'suando':'sem suor'} · ambiente ${S.env} °C`]};
+let sel='coracao',selEl=null;
+function renderInfo(){const i=INFO[sel];$('#iSys').textContent=i[0];$('#iName').textContent=i[1];$('#iTxt').textContent=i[2];$('#iLive').textContent=i[3]()}
+$('#body').addEventListener('click',e=>{const t=e.target.closest('[data-organ]');if(!t)return;sel=t.dataset.organ;
+  if(selEl)selEl.classList.remove('sel');selEl=t;t.classList.add('sel');renderInfo();
+  if(innerWidth<=720)$('#info').scrollIntoView({behavior:'smooth',block:'nearest'})});
+
+/* ---------- ECG ---------- */
+const cv=$('#ecg'),cx=cv.getContext('2d');let W=0,H=0,ex=0,ey=null,ph=0;const dpr=Math.min(2,devicePixelRatio||1);
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);ex=0;ey=null}
+new ResizeObserver(size).observe(cv);
+const g=(x,m,w)=>Math.exp(-((x-m)**2)/(2*w*w));
+const ecgV=p=>.12*g(p,.1,.025)-.12*g(p,.22,.008)+1*g(p,.25,.01)-.28*g(p,.28,.01)+.3*g(p,.45,.045);
+function beatPulse(p){return p>.22&&p<.42?Math.sin((p-.22)/.2*Math.PI):0}
+
+/* ---------- desenho ---------- */
+const heart=$('#heart'),lungs=$('#lungs'),diaph=$('#diaph'),lungEls=[...document.querySelectorAll('.lung')];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches?.5:1;
+function draw(dt){
+  // ECG + batimento (subpassos para não perder o QRS)
+  const N=8,pxs=110;cx.lineWidth=1.6;cx.strokeStyle='#6fd39a';cx.lineJoin='round';
+  for(let k=0;k<N;k++){ph+=dt/N*S.hr/60;if(ph>=1)ph-=1;
+    const x=ex+pxs*dt/N,y=H*.62-ecgV(ph)*H*.5;
+    if(x>W){ex=0;ey=null;continue}
+    cx.clearRect(x,0,14,H);if(ey!==null){cx.beginPath();cx.moveTo(ex,ey);cx.lineTo(x,y);cx.stroke()}ex=x;ey=y}
+  const c=beatPulse(ph);pulseRef.v=c;
+  heart.setAttribute('transform',`translate(211 262) rotate(-28) scale(${1-.13*c*reduce})`);
+  $('#heartHalo').setAttribute('opacity',(.15+.5*c).toFixed(2));
+  // respiração
+  if(!S.hold){const prev=S.brPh;S.brPh=(S.brPh+dt*S.rr/60)%1;S.airDir=Math.sin(2*Math.PI*S.brPh)>=0?1:-1}
+  const br=S.hold?1:(1-Math.cos(2*Math.PI*S.brPh))/2;
+  const sc=1+.07*br*reduce;lungs.setAttribute('transform',`translate(200 210) scale(${sc} ${1+.09*br*reduce}) translate(-200 -210)`);
+  diaph.setAttribute('transform',`translate(0 ${(9*br*reduce).toFixed(1)})`);
+  const lc=mixHex('#f29aa6','#8b7bd8',(97-S.spo2)/15);lungEls.forEach(l=>l.setAttribute('fill',lc));
+  $('#airflow').style.opacity=S.hold?0:.8;
+  // fluxos
+  for(const f of flows){f.off-=f.speed()*dt;f.el.style.strokeDashoffset=f.off}
+  $('#urethra').setAttribute('opacity',S.urinating?1:0);
+  // órgãos
+  const sl=clamp((S.stomach+S.stomachWater/5)/80,0,1);$('#stomFill').setAttribute('y',384-sl*68);$('#stomFill').setAttribute('height',sl*68);
+  const bl=clamp(S.bladder/500,0,1);$('#bladFill').setAttribute('y',510-bl*24);$('#bladFill').setAttribute('height',bl*24);
+  $('#pancHalo').setAttribute('opacity',clamp(S.insulin/1.2,0,.9).toFixed(2));
+  $('#liverHalo').setAttribute('opacity',clamp(S.liver/1.5,0,.7).toFixed(2));
+  const ad=clamp(S.adren,0,1).toFixed(2);$('#adrHalo1').setAttribute('opacity',ad);$('#adrHalo2').setAttribute('opacity',ad);
+  $('#brainHalo').setAttribute('opacity',(S.brain*.45*(.85+.15*Math.sin(performance.now()/180))).toFixed(2));
+  const mo=clamp(.12+(met()-1)*.06+(S.shiver?.25:0),0,.7);const jit=S.shiver?(Math.random()-.5)*1.2:0;
+  muscles.forEach(m=>{m.setAttribute('fill-opacity',mo.toFixed(2));m.setAttribute('transform',`translate(${jit} 0)`)});
+  // pele: cor pela temperatura, suor
+  const t=S.temp,skc=t>=36.8?mixHex('#8fd8e8','#ff8a5c',(t-36.8)/1.6):mixHex('#8fd8e8','#7aa8ff',(36.8-t)/1);
+  $('#skin').setAttribute('stroke',skc);$('#head').setAttribute('stroke',skc);
+  $('#sweat').setAttribute('opacity',S.sweat>.05?(.4+.4*Math.abs(Math.sin(performance.now()/600))).toFixed(2):0);
+  // bolo alimentar
+  if(S.boluses.length){const b=S.boluses[0],p=esoph.getPointAtLength(esLen*clamp(b.t,0,1));b.dot.setAttribute('cx',p.x);b.dot.setAttribute('cy',p.y)}
+}
+
+let last=performance.now(),acc=0;
+function loop(now){const dt=Math.min(.1,(now-last)/1000);last=now;step(dt);draw(dt);acc+=dt;if(acc>.25){acc=0;renderVitals()}requestAnimationFrame(loop)}
+size();renderVitals();log('start','Simulação iniciada: corpo em repouso',1);
+selEl=document.querySelector('[data-organ="coracao"]');selEl.classList.add('sel');
+requestAnimationFrame(loop);
+})();
+</script>
